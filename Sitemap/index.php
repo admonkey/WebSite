@@ -11,14 +11,6 @@ echo "
 
 $path = realpath($path_real_relative_root);
 
-/*
-$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
-$Regex = new RegexIterator($objects, '/^.+\.(php|html)$/i', RecursiveRegexIterator::GET_MATCH);
-foreach($Regex as $name => $object){
-    echo substr($name,strlen($path_real_relative_root)) . "<br/>\n";
-}
-*/
-
 // thanks to salathe
 // http://stackoverflow.com/questions/3321547/how-to-use-regexiterator-in-php
 
@@ -44,27 +36,28 @@ class DirnameFilter extends FilesystemRegexFilter {
     }
 }
 
+$exclude_list = file('sitemap.exclude.lst',FILE_IGNORE_NEW_LINES);
+function exclude_from_sitemap($file){
+  global $exclude_list;
+  foreach ($exclude_list as $item)
+    if ( $file == $item ) return true;
+  return false;
+}
+
 $directory = new RecursiveDirectoryIterator($path);
 // Filter out _resources and hidden folders
 $filter = new DirnameFilter($directory, '/^(?!(\.|_resources))/');
 // Filter PHP/HTML files 
 $filter = new FilenameFilter($filter, '/\.(?:php|html)$/');
-// Filter out credentials files
-$filter = new FilenameFilter($filter, '/^(?!credentials)/');
-// Filter out navigation-menu files
-$filter = new FilenameFilter($filter, '/^(?!navigation-menu)/');
-// Filter out header.php files
-$filter = new FilenameFilter($filter, '/^(?!header.php)/');
-// Filter out footer.php files
-$filter = new FilenameFilter($filter, '/^(?!footer.php)/');
 
 $sitemap = '
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ';
 foreach(new RecursiveIteratorIterator($filter) as $pathfile) {
-  $sitemap .= "\t<url>\n";
   $basefile = substr($pathfile,strlen($path_real_relative_root));
+  if (exclude_from_sitemap($basefile)) continue;
+  $sitemap .= "\t<url>\n";
   $webfile = "$path_web_relative_root$basefile";
   // FIX: using invalid protocol relative url,
   // need dynamic sitemap to serve up http or https
@@ -78,6 +71,8 @@ foreach(new RecursiveIteratorIterator($filter) as $pathfile) {
 $sitemap .= "</urlset>\n";
 
 echo "<pre>" . htmlentities($sitemap) . "</pre>";
+
+//file_put_contents('sitemap.xml',$sitemap);
 
 echo "
   </div><!-- /.well-->

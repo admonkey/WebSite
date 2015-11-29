@@ -1,0 +1,40 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<url>
+		<loc>//localhost/media.puck.work/index.php</loc>
+		<lastmod>2015-11-27</lastmod>
+	</url>
+	<url>
+		<loc>//localhost/media.puck.work/SubTree/index.php</loc>
+		<lastmod>2015-11-28</lastmod>
+	</url>
+	<url>
+		<loc>//localhost/media.puck.work/Forms/index.php</loc>
+		<lastmod>2015-11-28</lastmod>
+	</url>
+	<url>
+		<loc>//localhost/media.puck.work/LDAP/php5-ldap.php</loc>
+		<lastmod>2015-11-28</lastmod>
+	</url>
+	<url>
+		<loc>//localhost/media.puck.work/LDAP/login.php</loc>
+		<lastmod>2015-11-27</lastmod>
+	</url>
+	<url>
+		<loc>//localhost/media.puck.work/LDAP/index.php</loc>
+		<lastmod>2015-11-28</lastmod>
+	</url>
+	<url>
+		<loc>//localhost/media.puck.work/LDAP/apache.php</loc>
+		<lastmod>2015-11-27</lastmod>
+	</url>
+	<url>
+		<loc>//localhost/media.puck.work/Tables/index.php</loc>
+		<lastmod>2015-11-28</lastmod>
+	</url>
+	<url>
+		<loc>//localhost/media.puck.work/Sitemap/index.php</loc>
+		<lastmod>2015-11-29</lastmod>
+	</url>
+</urlset>
