@@ -58,10 +58,26 @@ $filter = new FilenameFilter($filter, '/^(?!header.php)/');
 // Filter out footer.php files
 $filter = new FilenameFilter($filter, '/^(?!footer.php)/');
 
-foreach(new RecursiveIteratorIterator($filter) as $file) {
-  $file = substr($file,strlen($path_real_relative_root));
-    echo "<a href='$path_web_relative_root$file'>$file</a><br/>\n";
+$sitemap = '
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+';
+foreach(new RecursiveIteratorIterator($filter) as $pathfile) {
+  $sitemap .= "\t<url>\n";
+  $basefile = substr($pathfile,strlen($path_real_relative_root));
+  $webfile = "$path_web_relative_root$basefile";
+  // FIX: using invalid protocol relative url,
+  // need dynamic sitemap to serve up http or https
+  $sitemap .= "\t\t<loc>//$_SERVER[SERVER_NAME]$webfile</loc>\n";
+  $modified = date("Y-m-d",filemtime($pathfile));
+  $sitemap .= "\t\t<lastmod>$modified</lastmod>\n";
+  $sitemap .= "\t</url>\n";
+  
+  echo "<a target='_blank' href='$path_web_relative_root$basefile'>$basefile</a><br/>\n";
 }
+$sitemap .= "</urlset>\n";
+
+echo "<pre>" . htmlentities($sitemap) . "</pre>";
 
 echo "
   </div><!-- /.well-->
