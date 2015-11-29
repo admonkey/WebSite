@@ -56,7 +56,11 @@ $sitemap = '
 ';
 foreach(new RecursiveIteratorIterator($filter) as $pathfile) {
   $basefile = substr($pathfile,strlen($path_real_relative_root));
-  if (exclude_from_sitemap($basefile)) continue;
+  $print_anchor = "<a target='_blank' href='$path_web_relative_root$basefile'>$basefile</a><br/>\n";
+  if (exclude_from_sitemap($basefile)){
+    echo "<span style='text-decoration: line-through;'>$print_anchor</span>";
+    continue;
+  }
   $sitemap .= "\t<url>\n";
   $webfile = "$path_web_relative_root$basefile";
   // FIX: using invalid protocol relative url,
@@ -66,7 +70,7 @@ foreach(new RecursiveIteratorIterator($filter) as $pathfile) {
   $sitemap .= "\t\t<lastmod>$modified</lastmod>\n";
   $sitemap .= "\t</url>\n";
   
-  echo "<a target='_blank' href='$path_web_relative_root$basefile'>$basefile</a><br/>\n";
+  echo $print_anchor;
 }
 $sitemap .= "</urlset>\n";
 
