@@ -11,10 +11,56 @@ echo "
 
 $path = realpath($path_real_relative_root);
 
+/*
 $objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
 $Regex = new RegexIterator($objects, '/^.+\.(php|html)$/i', RecursiveRegexIterator::GET_MATCH);
 foreach($Regex as $name => $object){
     echo substr($name,strlen($path_real_relative_root)) . "<br/>\n";
+}
+*/
+
+// thanks to salathe
+// http://stackoverflow.com/questions/3321547/how-to-use-regexiterator-in-php
+
+abstract class FilesystemRegexFilter extends RecursiveRegexIterator {
+    protected $regex;
+    public function __construct(RecursiveIterator $it, $regex) {
+        $this->regex = $regex;
+        parent::__construct($it, $regex);
+    }
+}
+
+class FilenameFilter extends FilesystemRegexFilter {
+    // Filter files against the regex
+    public function accept() {
+        return ( ! $this->isFile() || preg_match($this->regex, $this->getFilename()));
+    }
+}
+
+class DirnameFilter extends FilesystemRegexFilter {
+    // Filter directories against the regex
+    public function accept() {
+        return ( ! $this->isDir() || preg_match($this->regex, $this->getFilename()));
+    }
+}
+
+$directory = new RecursiveDirectoryIterator($path);
+// Filter out _resources and hidden folders
+$filter = new DirnameFilter($directory, '/^(?!(\.|_resources))/');
+// Filter PHP/HTML files 
+$filter = new FilenameFilter($filter, '/\.(?:php|html)$/');
+// Filter out credentials files
+$filter = new FilenameFilter($filter, '/^(?!credentials)/');
+// Filter out navigation-menu files
+$filter = new FilenameFilter($filter, '/^(?!navigation-menu)/');
+// Filter out header.php files
+$filter = new FilenameFilter($filter, '/^(?!header.php)/');
+// Filter out footer.php files
+$filter = new FilenameFilter($filter, '/^(?!footer.php)/');
+
+foreach(new RecursiveIteratorIterator($filter) as $file) {
+  $file = substr($file,strlen($path_real_relative_root));
+    echo "<a href='$path_web_relative_root$file'>$file</a><br/>\n";
 }
 
 echo "
