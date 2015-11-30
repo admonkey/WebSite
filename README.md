@@ -12,6 +12,7 @@ This is built to take the tedium out of creating the following:
   - tablesorter
   - chartist
   - active directory login session via php LDAP
+  - sitemap.xml generator
 - checkout new git branch and commit to private remote
 
 ## Requirements
