@@ -56,6 +56,12 @@ function recurseDirs($main, $count=0){
 	    $ext = pathinfo($main.$file, PATHINFO_EXTENSION);
 	    if (in_array($ext,$extensions)){
 	    
+	      // tier 2 wipe for .inc.php and .ajax.php files
+	      $ext = pathinfo(substr( $main.$file, 0, ( (strlen($main.$file))-(strlen($ext)+1) ) ), PATHINFO_EXTENSION);
+	      if ($ext == "inc" || $ext == "ajax") {
+		continue;
+	      }
+	    
 	      // get site path relative to web root
 	      $basefile = substr($main.$file,strlen($path_real_relative_root));
 	      
