@@ -34,6 +34,8 @@ $sitemap = '
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ';
 
+$list_of_anchors = "<ul>";
+
 function recurseDirs($main, $count=0){
 
     // re-declare global for use inside function
@@ -42,19 +44,21 @@ function recurseDirs($main, $count=0){
     global $path_web_relative_root;
     global $included_extensions;
     global $excluded_extensions;
+    global $list_of_anchors;
     
     // open the folder
     $dirHandle = opendir($main);
-    
     // for each file in folder
     while($file = readdir($dirHandle)){
-    
+	
+	// get site path relative to web root
+	$basefile = substr($main.$file,strlen($path_real_relative_root));
+	
 	// if directory, then recurse
         if(is_dir($main.$file."/") && $file != '.' && $file != '..' && $file != '.git' && $file != '_resources'){
-        
             //echo "Directory {$file}: <br />";
+            $list_of_anchors .= "<li><a target='_blank' href='$path_web_relative_root$basefile'>$file</a></li><ul>";
             $count = recurseDirs($main.$file."/",$count);
-            
         }
         // else check if valid file
         else{
@@ -69,16 +73,13 @@ function recurseDirs($main, $count=0){
 		continue;
 	      }
 	    
-	      // get site path relative to web root
-	      $basefile = substr($main.$file,strlen($path_real_relative_root));
-	      
 	      // create link on gui for selection
-	      $print_anchor = "<a target='_blank' href='$path_web_relative_root$basefile'>$basefile</a><br/>\n";
+	      $print_anchor = "<li><a target='_blank' href='$path_web_relative_root$basefile'>$file</a></li>";
 	      
 	      // if manually excluded, then style strike-through, and go to next file
 	      if (exclude_from_sitemap($basefile)){
 	      
-		echo "<span style='text-decoration: line-through;'>$print_anchor</span>";
+		$list_of_anchors .= "<span style='text-decoration: line-through;'>$print_anchor</span>\n";
 		continue;
 		
 	      }
@@ -103,47 +104,41 @@ function recurseDirs($main, $count=0){
 	      
 	      // done
 	      $sitemap .= "\t</url>\n";
-	      echo $print_anchor;
+	      $list_of_anchors .= "$print_anchor\n";
 	    }
         }
     }
+    $list_of_anchors .= "</ul>";
     return $count;
 }
 
 // begin page html
-echo "
-
-  <h1>$section_title</h1>
-  <div class='well'>
-  
-";
+echo "<h1>$section_title</h1>";
 
 // filter information
-echo "<h2>Filtered Extensions</h2>
-  <ul id='filtered_extensions'>";
+echo "
+<div id='sitemap_filters_div' class='well'>
+  <h2>Filtered Filename Extensions</h2>
+    <ul id='filtered_extensions'>";
 foreach ($included_extensions as $in_ext){
-  echo "<li>including filename.$in_ext</li>";
+  echo "<li>including <code>filename.$in_ext</code></li>";
   foreach ($excluded_extensions as $ex_ext)
-    echo "<li>excluding filename.$ex_ext.$in_ext</li>";
+    echo "<li>excluding <code>filename.$ex_ext.$in_ext</code></li>";
 }
-echo "</ul>";
+echo "</ul></div><!-- /#sitemap_filters_div.well -->";
 
 // main function call
 $number_of_files = recurseDirs($dir);
-
 // close sitemap.xml tag *must come after call to recurseDirs() in main*
 $sitemap .= "</urlset>\n";
 
-// count of files in sitemap
-echo $number_of_files." locations in sitemap.xml";
+// list of links to pages found
+echo "<div id='links_to_pages' class='well'><h2>$number_of_files Pages</h2>$list_of_anchors</div><!-- /#links_to_pages.well -->";
 
 // print raw sitemap.xml to screen
+echo "<div id='raw_sitemap_xml' class='well'><h2>sitemap.xml</h2>";
 echo "<pre>" . htmlentities($sitemap) . "</pre>";
-
-// end page html
-echo "
-  </div><!-- /.well-->
-";
+echo "</div><!-- /#raw_sitemap_xml.well -->";
 
 require_once('../_resources/footer.php');
 
