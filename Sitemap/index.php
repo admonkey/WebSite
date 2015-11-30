@@ -121,7 +121,7 @@ echo "
   <h2>Filtered Filename Extensions</h2>
     <ul id='filtered_extensions'>";
 foreach ($included_extensions as $in_ext){
-  echo "<li>including <code>filename.$in_ext</code></li>";
+  echo "<li>including <code style='color:green;'>filename.$in_ext</code></li>";
   foreach ($excluded_extensions as $ex_ext)
     echo "<li>excluding <code>filename.$ex_ext.$in_ext</code></li>";
 }
