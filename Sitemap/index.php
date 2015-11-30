@@ -99,7 +99,7 @@ function recurseDirs($main, $count=0){
 	      $sitemap .= "\t\t<loc>//$_SERVER[SERVER_NAME]$webfile</loc>\n";
 	      
 	      // last modified
-	      $modified = date("Y-m-d",filemtime($pathfile));
+	      $modified = date("Y-m-d",filemtime($main.$file));
 	      $sitemap .= "\t\t<lastmod>$modified</lastmod>\n";
 	      
 	      // done
