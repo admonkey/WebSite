@@ -1,11 +1,11 @@
 <?php
 
 include_once('../_resources/credentials.php');
-//$page_title = "Home Page";
+$page_title = "Iterator";
 require_once('../_resources/header.php');
 
 echo "
-  <h1>$section_title</h1>
+  <h1>$page_title</h1>
   <div class='well'>
 ";
 
