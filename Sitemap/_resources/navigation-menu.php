@@ -1,2 +1,2 @@
-<li><a href='#'>View</a></li>
-<li><a href='#'>Generate</a></li>
+<li><a href='iter.php'>Iterator</a></li>
+<li><a href='rudi.php'>Rudimentary</a></li>
