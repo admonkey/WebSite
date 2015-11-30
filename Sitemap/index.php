@@ -4,6 +4,15 @@ include_once('../_resources/credentials.php');
 //$page_title = "Home Page";
 require_once('../_resources/header.php');
 
+// select file extension type for sitemap,
+// $included_extensions = array("php", "html");
+
+// but we're just using php for now because of header includes.
+$included_extensions = array("php");
+
+// select 2nd tier file extensions to exclude, such as file.inc.php or file.ajax.php
+$excluded_extensions = array("inc","ajax");
+
 // list of files that you don't want on sitemap
 $exclude_list = file('sitemap.exclude.lst',FILE_IGNORE_NEW_LINES);
 function exclude_from_sitemap($file){
@@ -31,10 +40,8 @@ function recurseDirs($main, $count=0){
     global $sitemap;
     global $path_real_relative_root;
     global $path_web_relative_root;
-    
-    // support any file extension type, but we're just using php for now.
-    //$extensions = array("php", "html");
-    $extensions = array("php");
+    global $included_extensions;
+    global $excluded_extensions;
     
     // open the folder
     $dirHandle = opendir($main);
@@ -54,11 +61,11 @@ function recurseDirs($main, $count=0){
         
 	    // check for matching file extension
 	    $ext = pathinfo($main.$file, PATHINFO_EXTENSION);
-	    if (in_array($ext,$extensions)){
+	    if (in_array($ext,$included_extensions)){
 	    
-	      // tier 2 wipe for .inc.php and .ajax.php files
+	      // tier 2 wipe for excluded extensions
 	      $ext = pathinfo(substr( $main.$file, 0, ( (strlen($main.$file))-(strlen($ext)+1) ) ), PATHINFO_EXTENSION);
-	      if ($ext == "inc" || $ext == "ajax") {
+	      if (in_array($ext,$excluded_extensions)) {
 		continue;
 	      }
 	    
@@ -110,6 +117,16 @@ echo "
   <div class='well'>
   
 ";
+
+// filter information
+echo "<h2>Filtered Extensions</h2>
+  <ul id='filtered_extensions'>";
+foreach ($included_extensions as $in_ext){
+  echo "<li>including filename.$in_ext</li>";
+  foreach ($excluded_extensions as $ex_ext)
+    echo "<li>excluding filename.$ex_ext.$in_ext</li>";
+}
+echo "</ul>";
 
 // main function call
 $number_of_files = recurseDirs($dir);
