@@ -74,12 +74,15 @@ function recurseDirs($main, $count=0){
 	      }
 	    
 	      // create link on gui for selection
-	      $print_anchor = "<li><a target='_blank' href='$path_web_relative_root$basefile'>$file</a></li>";
+	      $print_anchor = "<a target='_blank' href='$path_web_relative_root$basefile'>$file</a>";
+	      $open_checkbox = " <input name='exclude_file[]' type='checkbox' value='$basefile' ";
+	      $print_anchor = $print_anchor.$open_checkbox;
+	      $close_checkbox = "></input>";
 	      
 	      // if manually excluded, then style strike-through, and go to next file
 	      if (exclude_from_sitemap($basefile)){
 	      
-		$list_of_anchors .= "<span style='text-decoration: line-through;'>$print_anchor</span>\n";
+		$list_of_anchors .= "<span class='excluded_from_sitemap'><li>$print_anchor $close_checkbox</li></span>\n";
 		continue;
 		
 	      }
@@ -104,7 +107,7 @@ function recurseDirs($main, $count=0){
 	      
 	      // done
 	      $sitemap .= "\t</url>\n";
-	      $list_of_anchors .= "$print_anchor\n";
+	      $list_of_anchors .= "<li>$print_anchor checked $close_checkbox</li>\n";
 	    }
         }
     }
@@ -133,7 +136,17 @@ $number_of_files = recurseDirs($dir);
 $sitemap .= "</urlset>\n";
 
 // list of links to pages found
-echo "<div id='links_to_pages' class='well'><h2>$number_of_files Pages</h2>$list_of_anchors</div><!-- /#links_to_pages.well -->";
+echo "
+<div id='links_to_pages' class='well'>
+  <h2>$number_of_files Pages</h2>
+  <form method='get' role='form'>
+    $list_of_anchors
+    <button class='btn btn-primary'>Submit</button>
+  </form>
+</div><!-- /#links_to_pages.well -->";
+
+//foreach ($_GET["exclude_file"] as $line)
+//  echo "$line<br/>";
 
 // print raw sitemap.xml to screen
 echo "<div id='raw_sitemap_xml' class='well'><h2>sitemap.xml</h2>";
@@ -143,3 +156,10 @@ echo "</div><!-- /#raw_sitemap_xml.well -->";
 require_once('../_resources/footer.php');
 
 ?>
+
+<style>
+.excluded_from_sitemap a {
+  text-decoration: line-through;
+  color: red;
+}
+</style>
