@@ -1,5 +1,5 @@
 <?php
 
-header('location: iter.php');
+header('location: rudi.php');
 
 ?>
