@@ -157,13 +157,22 @@ require_once('../_resources/footer.php');
 $(function(){
   $("input[name='exclude_file']").change(function(){
     var exclude_item = $(this);
-    $.ajax({url: "sitemap.exclude.lst.update.ajax.php?exclude_file=" + exclude_item.val(), success: function(result){
-      $("#change_notifications").append(result);
-      exclude_item.parents("span").toggleClass("excluded_from_sitemap");
-      $("#number_of_files").hide();
-      $("#raw_sitemap_xml").hide();
-      $("#regenerate_sitemap_xml").show();
-    },cache: false});
+    $.ajax({url: "sitemap.exclude.lst.update.ajax.php?exclude_file=" + exclude_item.val(), 
+      statusCode: {
+	200: function(result){
+	  $("#change_notifications").append(result);
+	  exclude_item.parents("span").toggleClass("excluded_from_sitemap");
+	  $("#number_of_files").hide();
+	  $("#raw_sitemap_xml").hide();
+	  $("#regenerate_sitemap_xml").show();
+	},
+	403: function(){
+	  $("#change_notifications").append("<p><label class='label label-danger'>ERROR: couldn't write to sitemap.exclude.lst - check permissions</label></p>");
+	  exclude_item.prop("checked", !exclude_item.prop("checked"));
+	}
+      },
+      cache: false
+    });
   });
 });
 </script>

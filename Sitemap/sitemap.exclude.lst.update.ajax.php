@@ -24,9 +24,16 @@ if (isset($_GET['exclude_file'])) {
   }
 
   // write to disk
-  file_put_contents('sitemap.exclude.lst', implode("\n", $exclude_list));
-  echo $return;
+  if(file_put_contents('sitemap.exclude.lst', implode("\n", $exclude_list)))
+    echo $return;
+  else {
+    echo "ERROR: couldn't write to sitemap.exclude.lst - check permissions";
+    http_response_code(403);
+  }
   
-} else echo "no exclude_file";
+} else {
+  echo "no exclude_file";
+  http_response_code(400);
+}
 
 ?>
