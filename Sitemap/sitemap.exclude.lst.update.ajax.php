@@ -11,7 +11,7 @@ if (isset($_GET['exclude_file'])) {
     if ( $_GET["exclude_file"] == $item ){
       unset($exclude_list[$i]);
       $deleted_item = true;
-      $return = "deleted $_GET[exclude_file]";
+      $return = "<span style='color:green'>included $_GET[exclude_file]</span><br/>";
       break;
     }
     $i++;
@@ -20,7 +20,7 @@ if (isset($_GET['exclude_file'])) {
   // if not deleting, then add to list
   if (!isset($deleted_item)){
     $exclude_list []= $_GET["exclude_file"];
-    $return = "added $_GET[exclude_file]";
+    $return = "<span style='color:red'>excluded $_GET[exclude_file]</span><br/>";
   }
 
   // write to disk

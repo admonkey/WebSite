@@ -107,7 +107,7 @@ function recurseDirs($main, $count=0){
 	      
 	      // done
 	      $sitemap .= "\t</url>\n";
-	      $list_of_anchors .= "<li>$print_anchor checked $close_checkbox</li>\n";
+	      $list_of_anchors .= "<span><li>$print_anchor checked $close_checkbox</li></span>\n";
 	    }
         }
     }
@@ -138,20 +138,16 @@ $sitemap .= "</urlset>\n";
 // list of links to pages found
 echo "
 <div id='links_to_pages' class='well'>
-  <h2>$number_of_files Pages</h2>
-  <form method='get' role='form'>
+  <h2><span id='number_of_files'>$number_of_files </span>Pages</h2>
     $list_of_anchors
-    <button class='btn btn-primary'>Submit</button>
-  </form>
+  <div id='change_notifications'></div>
+  <a id='regenerate_sitemap_xml' class='btn btn-primary' style='display:none' href=''>Regenerate sitemap.xml</a>
 </div><!-- /#links_to_pages.well -->";
 
-//foreach ($_GET["exclude_file"] as $line)
-//  echo "$line<br/>";
-
 // print raw sitemap.xml to screen
-echo "<div id='raw_sitemap_xml' class='well'><h2>sitemap.xml</h2>";
-echo "<pre>" . htmlentities($sitemap) . "</pre>";
-echo "</div><!-- /#raw_sitemap_xml.well -->";
+echo "<div class='well'><h2>sitemap.xml</h2>";
+echo "<pre id='raw_sitemap_xml'>" . htmlentities($sitemap) . "</pre>";
+echo "</div><!-- /.well -->";
 
 require_once('../_resources/footer.php');
 
@@ -160,7 +156,14 @@ require_once('../_resources/footer.php');
 <script>
 $(function(){
   $("input[name='exclude_file']").change(function(){
-    alert($(this).val());
+    var exclude_item = $(this);
+    $.ajax({url: "sitemap.exclude.lst.update.ajax.php?exclude_file=" + exclude_item.val(), success: function(result){
+      $("#change_notifications").append(result);
+      exclude_item.parents("span").toggleClass("excluded_from_sitemap");
+      $("#number_of_files").hide();
+      $("#raw_sitemap_xml").hide();
+      $("#regenerate_sitemap_xml").show();
+    },cache: false});
   });
 });
 </script>
