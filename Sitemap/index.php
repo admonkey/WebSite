@@ -75,7 +75,7 @@ function recurseDirs($main, $count=0){
 	    
 	      // create link on gui for selection
 	      $print_anchor = "<a target='_blank' href='$path_web_relative_root$basefile'>$file</a>";
-	      $open_checkbox = " <input name='exclude_file[]' type='checkbox' value='$basefile' ";
+	      $open_checkbox = " <input name='exclude_file' type='checkbox' value='$basefile' ";
 	      $print_anchor = $print_anchor.$open_checkbox;
 	      $close_checkbox = "></input>";
 	      
@@ -156,6 +156,14 @@ echo "</div><!-- /#raw_sitemap_xml.well -->";
 require_once('../_resources/footer.php');
 
 ?>
+
+<script>
+$(function(){
+  $("input[name='exclude_file']").change(function(){
+    alert($(this).val());
+  });
+});
+</script>
 
 <style>
 .excluded_from_sitemap a {
