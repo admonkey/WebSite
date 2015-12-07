@@ -59,13 +59,22 @@ DELIMITER $$
 
 -- fetch messages
 CREATE PROCEDURE Forum_proc_Fetch_Messages(
-   IN p_thread_id INT
+   IN p_thread_id INT,
+	IN page INT
 )
 BEGIN
 
+	IF page = -1 THEN
+		SET page = (SELECT MAX( message_id ) FROM `Forum_Messages`);
+		SET page = (page DIV 10);
+	END IF;
+
+	SET page = (page * 10);
+
 	SELECT * FROM Forum_Messages
 	WHERE	message_thread_id = p_thread_id
-	  AND	message_deleted = 0;
+	  AND	message_deleted = 0
+	LIMIT page,10;
 
 END $$
 
