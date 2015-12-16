@@ -36,7 +36,7 @@ if ( ! ((strpos(basename($_SERVER["SCRIPT_NAME"]),'.ajax.') !== false) || (strpo
 
     <!-- BOOTSTRAP -->
     <script src='$path_web_root/_resources/bootstrap/bootstrap.3.3.4.min.js'></script>
-    <link rel='stylesheet' href='$path_web_root/_resources/bootstrap/bootstrap.3.3.4.min.css'></link>
+    <link rel='stylesheet' href='$path_web_root/_resources/bootstrap/bootstrap.3.3.4.css'></link>
     <link rel='stylesheet' href='$path_web_root/_resources/bootstrap/bootstrap.custom.css'></link>
     <link rel='stylesheet' href='$path_web_root/_resources/bootstrap/sidenav.css'></link>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->

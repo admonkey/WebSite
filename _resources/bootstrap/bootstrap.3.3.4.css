@@ -4117,6 +4117,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     padding-left: 0;
   }
 }
+/*
 .navbar-fixed-top .navbar-collapse,
 .navbar-fixed-bottom .navbar-collapse {
   max-height: 340px;
@@ -4127,6 +4128,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     max-height: 200px;
   }
 }
+*/
 .container > .navbar-header,
 .container-fluid > .navbar-header,
 .container > .navbar-collapse,
