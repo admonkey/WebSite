@@ -135,7 +135,7 @@ if ( ! ((strpos(basename($_SERVER["SCRIPT_NAME"]),'.ajax.') !== false) || (strpo
 		      <a href="<?php echo $path_web_root;?>/"><?php echo $site_title; ?></a>
 		  </li>
                 -->
-                <?php include($path_real_root . '/_resources/navigation-menu.php'); ?>
+                <?php include("$path_real_root/SiteMap/dev.navigation-menu.inc.php"); ?>
             </ul>
             <script>
 	      $('.navigation-menu').find('a').each(function(){
