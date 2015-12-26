@@ -2,7 +2,7 @@
 
 echo "
 
-  <li><a href='$path_web_root/Sitemap/'>SiteMap</a></li>
+  <li><a href='$path_web_root/SiteMap/'>SiteMap</a></li>
   <li><a href='$path_web_root/SubTree/'>SubTree</a></li>
   <li><a href='$path_web_root/Profiles/'>Profiles</a></li>
   <li><a href='$path_web_root/Forum/'>Forum</a></li>
