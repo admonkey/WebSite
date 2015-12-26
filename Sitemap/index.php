@@ -1,8 +1,8 @@
 <?php
 
-include_once('../_resources/credentials.php');
+require_once('_resources/credentials.inc.php');
 //$page_title = "Home Page";
-require_once('../_resources/header.php');
+require_once('_resources/header.inc.php');
 
 // select file extension type for sitemap,
 // $included_extensions = array("php", "html");
@@ -11,7 +11,7 @@ require_once('../_resources/header.php');
 $included_extensions = array("php");
 
 // select 2nd tier file extensions to exclude, such as file.inc.php or file.ajax.php
-$excluded_extensions = array("inc","ajax");
+$excluded_extensions = array("inc","ajax","bounce");
 
 // list of files that you don't want on sitemap
 $exclude_list = file('sitemap.exclude.lst',FILE_IGNORE_NEW_LINES);
@@ -26,7 +26,7 @@ function exclude_from_sitemap($file){
 // http://stackoverflow.com/questions/2528848/recursion-through-a-directory-tree-in-php
 
 // search entire site for files starting at web root
-$dir = realpath($path_real_relative_root) . "/";
+$dir = realpath($path_real_root) . "/";
 
 // sitemap.xml tag opening
 $sitemap = '
@@ -40,8 +40,8 @@ function recurseDirs($main, $count=0){
 
     // re-declare global for use inside function
     global $sitemap;
-    global $path_real_relative_root;
-    global $path_web_relative_root;
+    global $path_real_root;
+    global $path_web_root;
     global $included_extensions;
     global $excluded_extensions;
     global $list_of_anchors;
@@ -52,12 +52,12 @@ function recurseDirs($main, $count=0){
     while($file = readdir($dirHandle)){
 	
 	// get site path relative to web root
-	$basefile = substr($main.$file,strlen($path_real_relative_root));
+	$basefile = substr($main.$file,strlen($path_real_root));
 	
 	// if directory, then recurse
         if(is_dir($main.$file."/") && $file != '.' && $file != '..' && $file != '.git' && $file != '_resources'){
             //echo "Directory {$file}: <br />";
-            $list_of_anchors .= "<li><a target='_blank' href='$path_web_relative_root$basefile'>$file</a></li><ul>";
+            $list_of_anchors .= "<li><a target='_blank' href='$path_web_root$basefile'>$file</a></li><ul>";
             $count = recurseDirs($main.$file."/",$count);
         }
         // else check if valid file
@@ -74,7 +74,7 @@ function recurseDirs($main, $count=0){
 	      }
 	    
 	      // create link on gui for selection
-	      $print_anchor = "<a target='_blank' href='$path_web_relative_root$basefile'>$file</a>";
+	      $print_anchor = "<a target='_blank' href='$path_web_root$basefile'>$file</a>";
 	      $open_checkbox = " <input name='exclude_file' type='checkbox' value='$basefile' ";
 	      $print_anchor = $print_anchor.$open_checkbox;
 	      $close_checkbox = "></input>";
@@ -95,7 +95,7 @@ function recurseDirs($main, $count=0){
 	      $sitemap .= "\t<url>\n";
 	      
 	      // url relative to site root
-	      $webfile = "$path_web_relative_root$basefile";
+	      $webfile = "$path_web_root$basefile";
 	      
 	      // FIX: using invalid protocol relative "//" url,
 	      // need dynamic sitemap to serve up "http://" or "https://"
@@ -149,7 +149,7 @@ echo "<div class='well'><h2>sitemap.xml</h2>";
 echo "<pre id='raw_sitemap_xml'>" . htmlentities($sitemap) . "</pre>";
 echo "</div><!-- /.well -->";
 
-require_once('../_resources/footer.php');
+require_once('_resources/footer.inc.php');
 
 ?>
 

@@ -1,15 +1,15 @@
 <?php
 
-include_once('../_resources/credentials.php');
+require_once('_resources/credentials.inc.php');
 $page_title = "Iterator";
-require_once('../_resources/header.php');
+require_once('_resources/header.inc.php');
 
 echo "
   <h1>$page_title</h1>
   <div class='well'>
 ";
 
-$path = realpath($path_real_relative_root);
+$path = realpath($path_real_root);
 
 // thanks to salathe
 // http://stackoverflow.com/questions/3321547/how-to-use-regexiterator-in-php
@@ -55,14 +55,14 @@ $sitemap = '
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ';
 foreach(new RecursiveIteratorIterator($filter) as $pathfile) {
-  $basefile = substr($pathfile,strlen($path_real_relative_root));
-  $print_anchor = "<a target='_blank' href='$path_web_relative_root$basefile'>$basefile</a><br/>\n";
+  $basefile = substr($pathfile,strlen($path_real_root));
+  $print_anchor = "<a target='_blank' href='$path_web_root$basefile'>$basefile</a><br/>\n";
   if (exclude_from_sitemap($basefile)){
     echo "<span style='text-decoration: line-through;'>$print_anchor</span>";
     continue;
   }
   $sitemap .= "\t<url>\n";
-  $webfile = "$path_web_relative_root$basefile";
+  $webfile = "$path_web_root$basefile";
   // FIX: using invalid protocol relative url,
   // need dynamic sitemap to serve up http or https
   $sitemap .= "\t\t<loc>//$_SERVER[SERVER_NAME]$webfile</loc>\n";
@@ -82,6 +82,6 @@ echo "
   </div><!-- /.well-->
 ";
 
-require_once('../_resources/footer.php');
+require_once('_resources/footer.inc.php');
 
 ?>
