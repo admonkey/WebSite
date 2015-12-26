@@ -3,31 +3,11 @@
 echo "
 
   <li><a href='$path_web_root/SubTree/'>SubTree</a></li>
-  <ul id='sitemap'>
-    <li><a href='$path_web_root/SiteMap/'>SiteMap</a></li>
-    <li><a href='$path_web_root/SiteMap/iter.php'>Iterator</a></li>
-    <ul id='subsitemap'>
-      <li><a href='$path_web_root/SiteMap/'>SiteMap</a></li>
+  <li><a href='$path_web_root/SiteMap/'>SiteMap</a> <a href='javascript:$(\"#sitemap\").show()'>Expand</a>
+    <ul id='sitemap' style='display:none'>
       <li><a href='$path_web_root/SiteMap/iter.php'>Iterator</a></li>
     </ul>
-    <li><a href='$path_web_root/SiteMap/'>SiteMap</a></li>
-    <li><a href='$path_web_root/SiteMap/iter.php'>Iterator</a></li>
-    <ul id='subsitemap'>
-      <li><a href='$path_web_root/SiteMap/'>SiteMap</a></li>
-      <li><a href='$path_web_root/SiteMap/iter.php'>Iterator</a></li>
-      <ul id='subsitemap'>
-	<li><a href='$path_web_root/SiteMap/'>SiteMap</a></li>
-	<li><a href='$path_web_root/SiteMap/iter.php'>Iterator</a></li>
-	      <li><a href='$path_web_root/SiteMap/'>SiteMap</a></li>
-      <li><a href='$path_web_root/SiteMap/iter.php'>Iterator</a></li>
-      <ul id='subsitemap'>
-	<li><a href='$path_web_root/SiteMap/'>SiteMap</a></li>
-	<li><a href='$path_web_root/SiteMap/iter.php'>Iterator</a></li>
-      </ul>
-      </ul>
-
-    </ul>
-  </ul>
+  </li>
   <li><a href='$path_web_root/SubTree/'>SubTree</a></li>
   <li><a href='$path_web_root/Profiles/'>Profiles</a></li>
   <li><a href='$path_web_root/Forum/'>Forum</a></li>
