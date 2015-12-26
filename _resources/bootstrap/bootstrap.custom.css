@@ -3,10 +3,11 @@ html {
 }
 body {
 	background-color: black;
-	background: url(../img/bg.jpg) no-repeat center center fixed;
+	background: url(../images/bg.jpg) no-repeat center center fixed;
 	background-size: cover;
 	/* BOOTSTRAP FIX: PADDING FOR STATIC-FIXED TOP NAV */
 	padding-top: 65px;
+	font-family: monospace;
 }
 /* Enhance Logo */
 .navbar-brand {
@@ -40,4 +41,34 @@ nav.navbar{
   font-size: 14px;
   text-decoration: none;
   color: #fff;
+}
+
+@media (min-width:768px) {
+  #login_nav_div {
+    float: right;
+  }
+}
+
+
+/* override table-striped with helper classes */
+.table-striped > tbody > tr:nth-of-type(odd).bg-primary {
+  color: #fff;
+  background-color: #337ab7;
+}
+.table-striped > tbody > tr:nth-of-type(odd).bg-success {
+  background-color: #dff0d8;
+}
+.table-striped > tbody > tr:nth-of-type(odd).bg-info {
+  background-color: #d9edf7;
+}
+.table-striped > tbody > tr:nth-of-type(odd).bg-warning {
+  background-color: #fcf8e3;
+}
+.table-striped > tbody > tr:nth-of-type(odd).bg-danger {
+  background-color: #f2dede;
+}
+
+/* default primary label background color is same as anchor */
+.label-primary a {
+  color:white;
 }
