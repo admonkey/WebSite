@@ -19,6 +19,7 @@ if ( ! ((strpos(basename($_SERVER["SCRIPT_NAME"]),'.ajax.') !== false) || (strpo
 
 
   <?php
+    $include_jquery_ui = true;
     if ( !empty($include_jquery_ui) ) {
       echo "
 	<!-- JQUERY-UI -->
