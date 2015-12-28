@@ -155,9 +155,9 @@ echo "
   <a id='regenerate_sitemap_xml' class='btn btn-primary' style='display:none' href=''>Regenerate sitemap.xml</a>
 </div><!-- /#links_to_pages.well -->";
 
-// print raw sitemap.xml to screen
-echo "<div class='well'><h2>sitemap.xml</h2>";
-echo "<pre id='raw_sitemap_xml'>" . htmlentities($sitemap) . "</pre>";
+// preview html navigation menu
+echo "<div class='well'><h2>navigation menu</h2>";
+echo "<ul class='sidebar-nav navigation-menu' style='background-color: black; position:relative;'>$navigation_menu</ul>";
 echo "</div><!-- /.well -->";
 
 // print raw html navigation menu to screen
@@ -165,8 +165,15 @@ echo "<div class='well'><h2>navigation menu</h2>";
 echo "<pre id='raw_navigation_menu'>" . htmlentities($navigation_menu) . "</pre>";
 echo "</div><!-- /.well -->";
 
+// print raw sitemap.xml to screen
+echo "<div class='well'><h2>sitemap.xml</h2>";
+echo "<pre id='raw_sitemap_xml'>" . htmlentities($sitemap) . "</pre>";
+echo "</div><!-- /.well -->";
+
+
+
 // write naviagtion menu to file
-file_put_contents("dev.navigation-menu.inc.php",$navigation_menu);
+//file_put_contents("dev.navigation-menu.inc.php",$navigation_menu);
 
 require_once('_resources/footer.inc.php');
 
