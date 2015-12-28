@@ -57,11 +57,27 @@ function get_site_pages($main, $count=0){
 	// get site path relative to web root
 	$basefile = substr($main.$file,strlen($path_real_root));
 	
+	// create link on gui for selection
+	$print_anchor = "<a target='_blank' href='$path_web_root$basefile'>$file</a>";
+	$open_checkbox = " <input name='exclude_file' type='checkbox' value='$basefile' ";
+	$print_anchor = $print_anchor.$open_checkbox;
+	$close_checkbox = "></input>";
+	
 	// if directory, then recurse
         if(is_dir($main.$file."/") && $file != '.' && $file != '..' && $file != '.git' && $file != '_resources'){
-            //echo "Directory {$file}: <br />";
+            
+
+            
+            // if manually excluded, then style strike-through, and go to next file
+	    if (exclude_from_sitemap($basefile)){
+	    
+	      $list_of_anchors .= "<span class='excluded_from_sitemap'><li>$print_anchor $close_checkbox</li></span>\n";
+	      continue;
+	      
+	    }
             $count++;
-            $list_of_anchors .= "<li><a target='_blank' href='$path_web_root$basefile'>$file</a></li><ul>";
+            //$list_of_anchors .= "<span><li><a target='_blank' href='$path_web_root$basefile'>$file</a></li><ul>";
+            $list_of_anchors .= "<span><li>$print_anchor checked $close_checkbox</li></span>\n<ul>";
             $navigation_menu .= "<li><a href='$path_web_root$basefile'>$file</a>\n<ul style='display:none'>\n";
             // <a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>
             //
@@ -84,12 +100,6 @@ function get_site_pages($main, $count=0){
 	      // ignore index files
 	      if ( !(strpos($file, "index") === false) ) continue;
 	    
-	      // create link on gui for selection
-	      $print_anchor = "<a target='_blank' href='$path_web_root$basefile'>$file</a>";
-	      $open_checkbox = " <input name='exclude_file' type='checkbox' value='$basefile' ";
-	      $print_anchor = $print_anchor.$open_checkbox;
-	      $close_checkbox = "></input>";
-	      
 	      // if manually excluded, then style strike-through, and go to next file
 	      if (exclude_from_sitemap($basefile)){
 	      
