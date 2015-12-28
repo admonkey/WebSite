@@ -36,7 +36,7 @@ $sitemap = '
 
 $list_of_anchors = "<ul>";
 
-function recurseDirs($main, $count=0){
+function get_site_pages($main, $count=0){
 
     // re-declare global for use inside function
     global $sitemap;
@@ -58,7 +58,7 @@ function recurseDirs($main, $count=0){
         if(is_dir($main.$file."/") && $file != '.' && $file != '..' && $file != '.git' && $file != '_resources'){
             //echo "Directory {$file}: <br />";
             $list_of_anchors .= "<li><a target='_blank' href='$path_web_root$basefile'>$file</a></li><ul>";
-            $count = recurseDirs($main.$file."/",$count);
+            $count = get_site_pages($main.$file."/",$count);
         }
         // else check if valid file
         else{
@@ -131,8 +131,8 @@ foreach ($included_extensions as $in_ext){
 echo "</ul></div><!-- /#sitemap_filters_div.well -->";
 
 // main function call
-$number_of_files = recurseDirs($dir);
-// close sitemap.xml tag *must come after call to recurseDirs() in main*
+$number_of_files = get_site_pages($dir);
+// close sitemap.xml tag *must come after call to get_site_pages() in main*
 $sitemap .= "</urlset>\n";
 
 // list of links to pages found
