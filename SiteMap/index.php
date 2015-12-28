@@ -178,8 +178,12 @@ echo "
     }
     $(function(){
       $("#preview_navigation_menu").find("ul").each(function(){
-	$(this).parent().prepend("<a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>");
-	//alert("found");
+	var list_items = $(this).find("li");
+	console.log(list_items);
+	if(list_items.length == 0)
+	  $(this).remove();
+	else
+	  $(this).parent().prepend("<a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>");
       });
     });
   </script>
