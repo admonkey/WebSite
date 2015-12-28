@@ -142,7 +142,7 @@ if ( ! ((strpos(basename($_SERVER["SCRIPT_NAME"]),'.ajax.') !== false) || (strpo
 
 	      function toggle_nav_item(toggle){
 		toggle.find(".glyphicon").toggleClass("glyphicon-plus-sign glyphicon-minus-sign");
-		toggle.parent().find("ul").toggle("blind");
+		toggle.parent().children("ul").toggle("blind");
 	      }
 
 	      $('.navigation-menu').find('a').each(function(){

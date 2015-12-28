@@ -61,7 +61,7 @@ function get_site_pages($main, $count=0){
         if(is_dir($main.$file."/") && $file != '.' && $file != '..' && $file != '.git' && $file != '_resources'){
             //echo "Directory {$file}: <br />";
             $list_of_anchors .= "<li><a target='_blank' href='$path_web_root$basefile'>$file</a></li><ul>";
-            $navigation_menu .= "<li><a target='_blank' href='$path_web_root$basefile'>$file</a> <a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>\n<ul style='display:none'>\n";
+            $navigation_menu .= "<li><a href='$path_web_root$basefile'>$file</a> <a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>\n<ul style='display:none'>\n";
             $count = get_site_pages($main.$file."/",$count);
             $navigation_menu .= "</ul>\n</li>\n";
         }
@@ -77,6 +77,9 @@ function get_site_pages($main, $count=0){
 	      if (in_array($ext,$excluded_extensions)) {
 		continue;
 	      }
+	      
+	      // ignore index files
+	      if ( !(strpos($file, "index") === false) ) continue;
 	    
 	      // create link on gui for selection
 	      $print_anchor = "<a target='_blank' href='$path_web_root$basefile'>$file</a>";
