@@ -62,7 +62,9 @@ function get_site_pages($main, $count=0){
             //echo "Directory {$file}: <br />";
             $count++;
             $list_of_anchors .= "<li><a target='_blank' href='$path_web_root$basefile'>$file</a></li><ul>";
-            $navigation_menu .= "<li><a href='$path_web_root$basefile'>$file</a> <a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>\n<ul style='display:none'>\n";
+            $navigation_menu .= "<li><a href='$path_web_root$basefile'>$file</a>\n<ul style='display:none'>\n";
+            // <a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>
+            //
             $count = get_site_pages($main.$file."/",$count);
             $navigation_menu .= "</ul>\n</li>\n";
         }
@@ -160,10 +162,13 @@ echo "
 ?>
 
 <div class='well'><h2>preview navigation menu</h2>
+
   <ul id='preview_navigation_menu' class='sidebar-nav navigation-menu' style='background-color: black; position:relative;'>
     <?php echo "$navigation_menu"; ?>
   </ul>
+
   <a href='javascript:ajax_write_nav_menu()' class='btn btn-primary' style='margin:10px'>Write to File</a>
+
   <script>
     function ajax_write_nav_menu(){
       var navigation_menu_html = $("#preview_navigation_menu").html();
@@ -171,7 +176,14 @@ echo "
 	    alert(result);
       });
     }
+    $(function(){
+      $("#preview_navigation_menu").find("ul").each(function(){
+	$(this).parent().prepend("<a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>");
+	//alert("found");
+      });
+    });
   </script>
+
 </div><!-- /.well -->
 
 <?php
