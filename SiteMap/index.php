@@ -60,6 +60,7 @@ function get_site_pages($main, $count=0){
 	// if directory, then recurse
         if(is_dir($main.$file."/") && $file != '.' && $file != '..' && $file != '.git' && $file != '_resources'){
             //echo "Directory {$file}: <br />";
+            $count++;
             $list_of_anchors .= "<li><a target='_blank' href='$path_web_root$basefile'>$file</a></li><ul>";
             $navigation_menu .= "<li><a href='$path_web_root$basefile'>$file</a> <a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>\n<ul style='display:none'>\n";
             $count = get_site_pages($main.$file."/",$count);
