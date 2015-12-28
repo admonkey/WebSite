@@ -157,9 +157,25 @@ echo "
 </div><!-- /#links_to_pages.well -->";
 
 // preview html navigation menu
-echo "<div class='well'><h2>navigation menu</h2>";
-echo "<ul class='sidebar-nav navigation-menu' style='background-color: black; position:relative;'>$navigation_menu</ul>";
-echo "</div><!-- /.well -->";
+?>
+
+<div class='well'><h2>preview navigation menu</h2>
+  <ul id='preview_navigation_menu' class='sidebar-nav navigation-menu' style='background-color: black; position:relative;'>
+    <?php echo "$navigation_menu"; ?>
+  </ul>
+  <a href='javascript:ajax_write_nav_menu()' class='btn btn-primary' style='margin:10px'>Write to File</a>
+  <script>
+    function ajax_write_nav_menu(){
+      var navigation_menu_html = $("#preview_navigation_menu").html();
+      $.post("write.navigation-menu.ajax.php", { navigation_menu_html:navigation_menu_html}, function(result){
+	    alert(result);
+      });
+    }
+  </script>
+</div><!-- /.well -->
+
+<?php
+
 
 // print raw html navigation menu to screen
 echo "<div class='well'><h2>navigation menu</h2>";
