@@ -189,7 +189,6 @@ echo "
     $(function(){
       $("#preview_navigation_menu").find("ul").each(function(){
 	var list_items = $(this).find("li");
-	console.log(list_items);
 	if(list_items.length == 0)
 	  $(this).remove();
 	else
@@ -213,10 +212,6 @@ echo "<div class='well'><h2>sitemap.xml</h2>";
 echo "<pre id='raw_sitemap_xml'>" . htmlentities($sitemap) . "</pre>";
 echo "</div><!-- /.well -->";
 
-
-
-// write naviagtion menu to file
-//file_put_contents("dev.navigation-menu.inc.php",$navigation_menu);
 
 require_once('_resources/footer.inc.php');
 
