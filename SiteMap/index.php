@@ -36,6 +36,8 @@ $sitemap = '
 
 $list_of_anchors = "<ul>";
 
+$navigation_menu = "";
+
 function get_site_pages($main, $count=0){
 
     // re-declare global for use inside function
@@ -45,6 +47,7 @@ function get_site_pages($main, $count=0){
     global $included_extensions;
     global $excluded_extensions;
     global $list_of_anchors;
+    global $navigation_menu;
     
     // open the folder
     $dirHandle = opendir($main);
@@ -58,7 +61,9 @@ function get_site_pages($main, $count=0){
         if(is_dir($main.$file."/") && $file != '.' && $file != '..' && $file != '.git' && $file != '_resources'){
             //echo "Directory {$file}: <br />";
             $list_of_anchors .= "<li><a target='_blank' href='$path_web_root$basefile'>$file</a></li><ul>";
+            $navigation_menu .= "<li><a target='_blank' href='$path_web_root$basefile'>$file</a> <a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>\n<ul style='display:none'>\n";
             $count = get_site_pages($main.$file."/",$count);
+            $navigation_menu .= "</ul>\n</li>\n";
         }
         // else check if valid file
         else{
@@ -100,6 +105,9 @@ function get_site_pages($main, $count=0){
 	      // FIX: using invalid protocol relative "//" url,
 	      // need dynamic sitemap to serve up "http://" or "https://"
 	      $sitemap .= "\t\t<loc>//$_SERVER[SERVER_NAME]$webfile</loc>\n";
+	      
+	      // html navigation menu
+	      $navigation_menu .= "<li><a href='$webfile'>".basename($webfile)."</a></li>\n";
 	      
 	      // last modified
 	      $modified = date("Y-m-d",filemtime($main.$file));
@@ -148,6 +156,14 @@ echo "
 echo "<div class='well'><h2>sitemap.xml</h2>";
 echo "<pre id='raw_sitemap_xml'>" . htmlentities($sitemap) . "</pre>";
 echo "</div><!-- /.well -->";
+
+// print raw html navigation menu to screen
+echo "<div class='well'><h2>navigation menu</h2>";
+echo "<pre id='raw_navigation_menu'>" . htmlentities($navigation_menu) . "</pre>";
+echo "</div><!-- /.well -->";
+
+// write naviagtion menu to file
+file_put_contents("dev.navigation-menu.inc.php",$navigation_menu);
 
 require_once('_resources/footer.inc.php');
 

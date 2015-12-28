@@ -137,12 +137,30 @@ if ( ! ((strpos(basename($_SERVER["SCRIPT_NAME"]),'.ajax.') !== false) || (strpo
                 -->
                 <?php include("$path_real_root/SiteMap/dev.navigation-menu.inc.php"); ?>
             </ul>
+
             <script>
+
+	      function toggle_nav_item(toggle){
+		toggle.find(".glyphicon").toggleClass("glyphicon-plus-sign glyphicon-minus-sign");
+		toggle.parent().find("ul").toggle("blind");
+	      }
+
 	      $('.navigation-menu').find('a').each(function(){
 		    if ( $(this).attr("href") == "<?php echo $_SERVER['SCRIPT_NAME'];?>" || $(this).attr("href") == "<?php echo dirname($_SERVER['SCRIPT_NAME'])."/";?>" )
 		      $(this).parent().addClass("active");
 	      });
+
 	    </script>
+
+
+	    <style>
+	      .navigation_menu_toggle {
+		margin-top : 20px;
+		margin-right : 10px;
+		float : right;
+	      }
+	    </style>
+
         </div><!-- /#sidebar-wrapper -->
 
 
