@@ -1,5 +1,9 @@
 <?php
 
+if( isset($_GET["get_page_title"]) ){
+  if( isset($page_title) ) die("$page_title");
+  else die("$section_title");
+}
 require_once((__DIR__)."/resources.inc.php");
 
 // if filename contains ".ajax." or ".bounce.", 
