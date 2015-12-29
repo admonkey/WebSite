@@ -78,7 +78,7 @@ function get_site_pages($main, $count=0){
             $count++;
             //$list_of_anchors .= "<span><li><a target='_blank' href='$path_web_root$basefile'>$file</a></li><ul>";
             $list_of_anchors .= "<span><li>$print_anchor checked $close_checkbox</li></span>\n<ul>";
-            $navigation_menu .= "<li><a href='$path_web_root$basefile'>$file</a>\n<ul style='display:none'>\n";
+            $navigation_menu .= "<li><a href='$path_web_root$basefile'>$file</a>\n<ul style='display:none' class='sortable'>\n";
             // <a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>
             //
             $count = get_site_pages($main.$file."/",$count);
@@ -173,7 +173,7 @@ echo "
 
 <div class='well'><h2>preview navigation menu</h2>
 
-  <ul id='preview_navigation_menu' class='sidebar-nav navigation-menu' style='background-color: black; position:relative;'>
+  <ul id='preview_navigation_menu' class='sortable sidebar-nav navigation-menu' style='background-color: black; position:relative;'>
     <?php echo "$navigation_menu"; ?>
   </ul>
 
@@ -181,6 +181,7 @@ echo "
 
   <script>
     function ajax_write_nav_menu(){
+      $("#preview_navigation_menu").find("ul, li").removeAttr('class');
       var navigation_menu_html = $("#preview_navigation_menu").html();
       $.post("write.navigation-menu.ajax.php", { navigation_menu_html:navigation_menu_html}, function(result){
 	    alert(result);
@@ -194,7 +195,10 @@ echo "
 	else
 	  $(this).parent().prepend("<a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>");
       });
+      $( ".sortable" ).sortable();
+      $( ".sortable" ).disableSelection();
     });
+    
   </script>
 
 </div><!-- /.well -->
