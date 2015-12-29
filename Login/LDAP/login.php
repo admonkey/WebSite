@@ -1,6 +1,6 @@
 <?php
 
-$page_title = "Session Login via PHP LDAP Authentication";
+$page_title = "PHP Session";
 $require_ssl = true;
 
 $ldap_server = "ldap.example.com";

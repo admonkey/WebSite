@@ -4,7 +4,7 @@ $ldap_server = "ldap.example.com";
 $ldap_dc_domain = "example";
 $ldap_dc_tld = "com";
 
-$page_title = "PHP LDAP Authentication";
+$page_title = "PHP Module";
 $require_ssl = true;
 
 require_once('_resources/header.inc.php');

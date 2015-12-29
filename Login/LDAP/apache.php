@@ -1,12 +1,12 @@
 <?php
 
-$page_title = "Apache LDAP Basic Authentication";
+$page_title = "Apache Basic Authentication";
 
 require_once('_resources/header.inc.php');
 
 echo "
 
-  <h1>$page_title</h1>
+  <h1>$page_title using $section_title</h1>
   
   <div id='enable_authnz_ldap' class='well'>
 
