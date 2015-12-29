@@ -74,9 +74,8 @@ function get_site_pages($main, $count=0){
 	$basefile = substr($main.$file,strlen($path_real_root));
 	
 	// create link on gui for selection
-	//$print_anchor = "<a target='_blank' href='$path_web_root$basefile'>$file</a>";
-	$fullfile = "$path_real_root$basefile";
-	$print_anchor = "<a target='_blank' href='$path_web_root$basefile'>".get_page_title($fullfile)."</a>";
+	$extracted_page_title = get_page_title($path_real_root.$basefile);
+	$print_anchor = "<a target='_blank' href='$path_web_root$basefile'>$extracted_page_title</a>";
 	$open_checkbox = " <input name='exclude_file' type='checkbox' value='$basefile' ";
 	$print_anchor = $print_anchor.$open_checkbox;
 	$close_checkbox = "></input>";
@@ -96,7 +95,7 @@ function get_site_pages($main, $count=0){
             $count++;
             //$list_of_anchors .= "<span><li><a target='_blank' href='$path_web_root$basefile'>$file</a></li><ul>";
             $list_of_anchors .= "<span><li>$print_anchor checked $close_checkbox</li></span>\n<ul>";
-            $navigation_menu .= "<li><a href='$path_web_root$basefile'>$file</a>\n<ul style='display:none' class='sortable'>\n";
+            $navigation_menu .= "<li><a href='$path_web_root$basefile'>$extracted_page_title</a>\n<ul style='display:none' class='sortable'>\n";
             // <a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>
             //
             $count = get_site_pages($main.$file."/",$count);
@@ -141,7 +140,7 @@ function get_site_pages($main, $count=0){
 	      $sitemap .= "\t\t<loc>//$_SERVER[SERVER_NAME]$webfile</loc>\n";
 	      
 	      // html navigation menu
-	      $navigation_menu .= "<li><a href='$webfile'>".basename($webfile)."</a></li>\n";
+	      $navigation_menu .= "<li><a href='$webfile'>$extracted_page_title</a></li>\n";
 	      
 	      // last modified
 	      $modified = date("Y-m-d",filemtime($main.$file));
