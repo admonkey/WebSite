@@ -7,6 +7,21 @@ require_once('_resources/header.inc.php');
 // select file extension type for sitemap,
 // $included_extensions = array("php", "html");
 
+function get_page_title($page_file){
+  // get first 10 lines of page
+  $section = file_get_contents($page_file, NULL, NULL, 0, 100);
+  // get into array
+  $lines = explode("\n", $section);
+  // find line containing $page_title
+  foreach($lines as $line){
+    if ( !(strpos($line, "page_title") === false) ){
+      // extract & return value of page title
+      $page_title_array = explode("\"",$line);
+      return $page_title_array[1];
+    }
+  }
+}
+
 // but we're just using php for now because of header includes.
 $included_extensions = array("php");
 
@@ -58,7 +73,9 @@ function get_site_pages($main, $count=0){
 	$basefile = substr($main.$file,strlen($path_real_root));
 	
 	// create link on gui for selection
-	$print_anchor = "<a target='_blank' href='$path_web_root$basefile'>$file</a>";
+	//$print_anchor = "<a target='_blank' href='$path_web_root$basefile'>$file</a>";
+	$fullfile = "$path_real_root$basefile";
+	$print_anchor = "<a target='_blank' href='$path_web_root$basefile'>".get_page_title($fullfile)."</a>";
 	$open_checkbox = " <input name='exclude_file' type='checkbox' value='$basefile' ";
 	$print_anchor = $print_anchor.$open_checkbox;
 	$close_checkbox = "></input>";
