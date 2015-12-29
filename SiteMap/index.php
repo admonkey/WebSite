@@ -9,7 +9,7 @@ require_once('_resources/header.inc.php');
 
 function get_page_title($page_file){
   // get first 10 lines of page
-  $section = file_get_contents($page_file, NULL, NULL, 0, 100);
+  $section = file_get_contents($page_file, NULL, NULL, 0, 200);
   // get into array
   $lines = explode("\n", $section);
   // find line containing $page_title
@@ -20,6 +20,7 @@ function get_page_title($page_file){
       return $page_title_array[1];
     }
   }
+  return basename($page_file);
 }
 
 // but we're just using php for now because of header includes.
