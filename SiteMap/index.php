@@ -209,6 +209,8 @@ echo "
     </ul>
 
     <a href='javascript:ajax_write_nav_menu()' class='btn btn-primary' style='margin:10px'>Write to File</a>
+    
+    <a href='javascript:highlight_differences()' class='btn btn-success' style='margin:10px'>Refresh</a>
 
     <script>
       function ajax_write_nav_menu(){
@@ -218,6 +220,24 @@ echo "
 	      alert(result);
 	});
       }
+      
+      // compare current and preview for differences
+      function highlight_differences(){
+	var master = [];
+
+	// Identify the master values.
+	$('#current_navigation_menu').find('li').each(function(index,value) {
+	    master.push($(this).text());
+	});
+
+	$("#preview_navigation_menu").find('li').each(function(index) {
+	    if(master[index] != $(this).text()) {
+		$(this).addClass('different_li');  
+	    } else $(this).removeClass('different_li');
+	});
+      }
+
+      
       $(function(){
 	$("#preview_navigation_menu").find("ul").each(function(){
 	  var list_items = $(this).find("li");
@@ -228,6 +248,8 @@ echo "
 	});
 	$( ".sortable" ).sortable();
 	$( ".sortable" ).disableSelection();
+	
+	highlight_differences();
       });
       
     </script>
@@ -279,9 +301,16 @@ $(function(){
 });
 </script>
 
+
 <style>
+
 .excluded_from_sitemap a {
   text-decoration: line-through;
   color: red;
 }
+
+.different_li a {
+  background-color: yellow;
+}
+
 </style>
