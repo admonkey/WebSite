@@ -223,6 +223,8 @@ echo "
       
       // compare current and preview for differences
       function highlight_differences(){
+	// thanks @Tats_innit
+	// http://stackoverflow.com/questions/10765488/comparing-2-ul-list-item-in-jquery#answer-10765533
 	var master = [];
 
 	// Identify the master values.
