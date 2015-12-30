@@ -231,6 +231,11 @@ echo "
 	// Identify the master values.
 	$('#current_navigation_menu').find('li').each(function(index,value) {
 	    master.push($(this).text().replace(/(\r\n|\n|\r)/gm, ""));
+	    /*
+	      thanks @Cerbrus
+	      for clean compounding return characters
+	      http://stackoverflow.com/questions/21572938/what-is-the-%E2%86%B5-character-in-chrome-console#answer-21572964
+	    */
 	});
 
 	$("#preview_navigation_menu").find('li').each(function(index) {
@@ -243,8 +248,6 @@ echo "
 	    preview.push($(this).text());
 	});
 	
-	console.log(master);
-	console.log(preview);
       }
 
       
