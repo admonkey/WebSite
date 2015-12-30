@@ -188,36 +188,53 @@ echo "
 // preview html navigation menu
 ?>
 
-<div class='well'><h2>preview navigation menu</h2>
+<div class='well'>
+  <div class='row'>
 
-  <ul id='preview_navigation_menu' class='sortable sidebar-nav navigation-menu' style='background-color: black; position:relative;'>
-    <?php echo "$navigation_menu"; ?>
-  </ul>
 
-  <a href='javascript:ajax_write_nav_menu()' class='btn btn-primary' style='margin:10px'>Write to File</a>
-
-  <script>
-    function ajax_write_nav_menu(){
-      $("#preview_navigation_menu").find("ul, li").removeAttr('class');
-      var navigation_menu_html = $("#preview_navigation_menu").html();
-      $.post("write.navigation-menu.ajax.php", { navigation_menu_html:navigation_menu_html}, function(result){
-	    alert(result);
-      });
-    }
-    $(function(){
-      $("#preview_navigation_menu").find("ul").each(function(){
-	var list_items = $(this).find("li");
-	if(list_items.length == 0)
-	  $(this).remove();
-	else
-	  $(this).parent().prepend("<a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>");
-      });
-      $( ".sortable" ).sortable();
-      $( ".sortable" ).disableSelection();
-    });
+  <div id='nav_menu_current_col' class='col-sm-6'>
+    <h2>Current</h2>
     
-  </script>
+    <ul id='current_navigation_menu' class='sidebar-nav navigation-menu' style='background-color: black; position:relative;'>
+      <?php require("dev.navigation-menu.inc.php"); ?>
+    </ul>
+  </div><!-- /#nav_menu_current_col -->
 
+
+  <div id='nav_menu_preview_col' class='col-sm-6'>
+    <h2>Preview</h2>
+
+    <ul id='preview_navigation_menu' class='sortable sidebar-nav navigation-menu' style='background-color: black; position:relative;'>
+      <?php echo "$navigation_menu"; ?>
+    </ul>
+
+    <a href='javascript:ajax_write_nav_menu()' class='btn btn-primary' style='margin:10px'>Write to File</a>
+
+    <script>
+      function ajax_write_nav_menu(){
+	$("#preview_navigation_menu").find("ul, li").removeAttr('class');
+	var navigation_menu_html = $("#preview_navigation_menu").html();
+	$.post("write.navigation-menu.ajax.php", { navigation_menu_html:navigation_menu_html}, function(result){
+	      alert(result);
+	});
+      }
+      $(function(){
+	$("#preview_navigation_menu").find("ul").each(function(){
+	  var list_items = $(this).find("li");
+	  if(list_items.length == 0)
+	    $(this).remove();
+	  else
+	    $(this).parent().prepend("<a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>");
+	});
+	$( ".sortable" ).sortable();
+	$( ".sortable" ).disableSelection();
+      });
+      
+    </script>
+  </div><!-- /#nav_menu_preview_col -->
+
+
+  </div><!-- /.row -->
 </div><!-- /.well -->
 
 <?php
