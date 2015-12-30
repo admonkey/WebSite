@@ -226,17 +226,25 @@ echo "
 	// thanks @Tats_innit
 	// http://stackoverflow.com/questions/10765488/comparing-2-ul-list-item-in-jquery#answer-10765533
 	var master = [];
+	var preview = [];
 
 	// Identify the master values.
 	$('#current_navigation_menu').find('li').each(function(index,value) {
-	    master.push($(this).text());
+	    master.push($(this).text().replace(/(\r\n|\n|\r)/gm, ""));
 	});
 
 	$("#preview_navigation_menu").find('li').each(function(index) {
-	    if(master[index] != $(this).text()) {
+	    if(master[index] != $(this).text().replace(/(\r\n|\n|\r)/gm, "")) {
 		$(this).addClass('different_li');  
 	    } else $(this).removeClass('different_li');
 	});
+	
+	$('#preview_navigation_menu').find('li').each(function(index,value) {
+	    preview.push($(this).text());
+	});
+	
+	console.log(master);
+	console.log(preview);
       }
 
       
