@@ -8,7 +8,7 @@ require_once('_resources/header.inc.php');
 // $included_extensions = array("php", "html");
 
 function get_page_title($page_file){
-  // get first 10 lines of page
+  // get first 200 characters of page
   $section = file_get_contents($page_file, NULL, NULL, 0, 200);
   // get into array
   $lines = explode("\n", $section);
@@ -20,6 +20,7 @@ function get_page_title($page_file){
       return $page_title_array[1];
     }
   }
+  // if no page title found, then return filename
   return basename($page_file);
 }
 
@@ -252,6 +253,7 @@ echo "
 
       
       $(function(){
+	// for each sub ul, add collapse toggle, or remove if empty
 	$("#preview_navigation_menu").find("ul").each(function(){
 	  var list_items = $(this).find("li");
 	  if(list_items.length == 0)
