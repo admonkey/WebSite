@@ -249,6 +249,12 @@ echo "
 	    preview.push($(this).text());
 	});
 	
+	
+	// improved version to preserve ordering:
+	// clone current nav menu
+	// for each li in clone, check if new menu contains item, else mark as removed
+	// for each li in new menu, check if clone contains item, else append to clone and mark as new
+	
       }
 
       
