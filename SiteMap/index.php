@@ -193,7 +193,7 @@ echo "
   <div class='row'>
 
 
-  <div id='nav_menu_current_col' class='col-sm-6'>
+  <div id='nav_menu_current_col' class='col-sm-4'>
     <h2>Current</h2>
     
     <ul id='current_navigation_menu' class='sidebar-nav navigation-menu' style='background-color: black; position:relative;'>
@@ -201,8 +201,13 @@ echo "
     </ul>
   </div><!-- /#nav_menu_current_col -->
 
+  <div id='nav_menu_clone_col' class='col-sm-4'>
+    <h2>Clone</h2>
+    <!-- ul goes here -->
+  </div><!-- /#nav_menu_clone_col -->
 
-  <div id='nav_menu_preview_col' class='col-sm-6'>
+
+  <div id='nav_menu_preview_col' class='col-sm-4'>
     <h2>Preview</h2>
 
     <ul id='preview_navigation_menu' class='sortable sidebar-nav navigation-menu' style='background-color: black; position:relative;'>
@@ -213,67 +218,6 @@ echo "
     
     <a href='javascript:highlight_differences()' class='btn btn-success' style='margin:10px'>Refresh</a>
 
-    <script>
-      function ajax_write_nav_menu(){
-	$("#preview_navigation_menu").find("ul, li").removeAttr('class');
-	var navigation_menu_html = $("#preview_navigation_menu").html();
-	$.post("write.navigation-menu.ajax.php", { navigation_menu_html:navigation_menu_html}, function(result){
-	      alert(result);
-	});
-      }
-      
-      // compare current and preview for differences
-      function highlight_differences(){
-	// thanks @Tats_innit
-	// http://stackoverflow.com/questions/10765488/comparing-2-ul-list-item-in-jquery#answer-10765533
-	var master = [];
-	var preview = [];
-
-	// Identify the master values.
-	$('#current_navigation_menu').find('li').each(function(index,value) {
-	    master.push($(this).text().replace(/(\r\n|\n|\r)/gm, ""));
-	    /*
-	      thanks @Cerbrus
-	      for clean compounding return characters
-	      http://stackoverflow.com/questions/21572938/what-is-the-%E2%86%B5-character-in-chrome-console#answer-21572964
-	    */
-	});
-
-	$("#preview_navigation_menu").find('li').each(function(index) {
-	    if(master[index] != $(this).text().replace(/(\r\n|\n|\r)/gm, "")) {
-		$(this).addClass('different_li');  
-	    } else $(this).removeClass('different_li');
-	});
-	
-	$('#preview_navigation_menu').find('li').each(function(index,value) {
-	    preview.push($(this).text());
-	});
-	
-	
-	// improved version to preserve ordering:
-	// clone current nav menu
-	// for each li in clone, check if new menu contains item, else mark as removed
-	// for each li in new menu, check if clone contains item, else append to clone and mark as new
-	
-      }
-
-      
-      $(function(){
-	// for each sub ul, add collapse toggle, or remove if empty
-	$("#preview_navigation_menu").find("ul").each(function(){
-	  var list_items = $(this).find("li");
-	  if(list_items.length == 0)
-	    $(this).remove();
-	  else
-	    $(this).parent().prepend("<a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>");
-	});
-	$( ".sortable" ).sortable();
-	$( ".sortable" ).disableSelection();
-	
-	highlight_differences();
-      });
-      
-    </script>
   </div><!-- /#nav_menu_preview_col -->
 
 
@@ -298,8 +242,88 @@ require_once('_resources/footer.inc.php');
 
 ?>
 
+
+<style>
+.excluded_from_sitemap a {
+  text-decoration: line-through;
+  color: red;
+}
+.different_li a {
+  background-color: yellow;
+}
+</style>
+
+
 <script>
+
+function ajax_write_nav_menu(){
+  $("#preview_navigation_menu").find("ul, li").removeAttr('class');
+  var navigation_menu_html = $("#preview_navigation_menu").html();
+  $.post("write.navigation-menu.ajax.php", { navigation_menu_html:navigation_menu_html}, function(result){
+	alert(result);
+  });
+}
+
+// compare current and preview for differences
+function highlight_differences(){
+  // thanks @Tats_innit
+  // http://stackoverflow.com/questions/10765488/comparing-2-ul-list-item-in-jquery#answer-10765533
+  var master = [];
+  var preview = [];
+
+  // Identify the master values.
+  $('#current_navigation_menu').find("li").each(function(index,value) {
+      master.push($(this).text().replace(/(\r\n|\n|\r)/gm, ""));
+      /*
+	thanks @Cerbrus
+	for clean compounding return characters
+	http://stackoverflow.com/questions/21572938/what-is-the-%E2%86%B5-character-in-chrome-console#answer-21572964
+      */
+  });
+
+  $("#preview_navigation_menu").find("li").each(function(index) {
+      if(master[index] != $(this).text().replace(/(\r\n|\n|\r)/gm, "")) {
+	  $(this).addClass("different_li");
+      } else $(this).removeClass("different_li");
+  });
+  
+  $('#preview_navigation_menu').find("li").each(function(index,value) {
+      preview.push($(this).text());
+  });
+  
+  
+  // improved version to preserve ordering:
+  // clone current nav menu
+  $("#current_navigation_menu").clone().prop("id", "clone_navigation_menu" ).appendTo("#nav_menu_clone_col");
+  // for each li in clone, check if new menu contains item, else mark as removed
+  $("#clone_navigation_menu").find("li").each(function(index) {
+    var clone_li = $(this);
+    var match = false;
+    $("#preview_navigation_menu").find("li").each(function(index) {
+      if( $(this).text() === clone_li.text() ) match = true;
+    });
+    if (!match) {clone_li.addClass("different_li"); console.log(clone_li.text())}
+  });
+  // for each li in new menu, check if clone contains item, else append to clone and mark as new
+  
+}
+
+function create_collapsible_menu(menu){
+  // for each sub ul, add collapse toggle, or remove if empty
+  menu.find("ul").each(function(){
+    var list_items = $(this).find("li");
+    if(list_items.length == 0)
+      $(this).remove();
+    else
+      $(this).parent().prepend("<a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>");
+  });
+  $( ".sortable" ).sortable();
+  $( ".sortable" ).disableSelection();
+}
+
+
 $(function(){
+  // update exclude list file on checkbox change
   $("input[name='exclude_file']").change(function(){
     var exclude_item = $(this);
     $.ajax({url: "sitemap.exclude.lst.update.ajax.php?exclude_file=" + exclude_item.val(), 
@@ -319,19 +343,10 @@ $(function(){
       cache: false
     });
   });
+  //create_collapsible_menu($("#clone_navigation_menu"));
+  create_collapsible_menu($("#preview_navigation_menu"));
+  highlight_differences();
 });
+
 </script>
 
-
-<style>
-
-.excluded_from_sitemap a {
-  text-decoration: line-through;
-  color: red;
-}
-
-.different_li a {
-  background-color: yellow;
-}
-
-</style>
