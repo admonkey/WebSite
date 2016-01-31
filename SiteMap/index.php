@@ -256,74 +256,7 @@ require_once('_resources/footer.inc.php');
 
 <script>
 
-function ajax_write_nav_menu(){
-  $("#preview_navigation_menu").find("ul, li").removeAttr('class');
-  var navigation_menu_html = $("#preview_navigation_menu").html();
-  $.post("write.navigation-menu.ajax.php", { navigation_menu_html:navigation_menu_html}, function(result){
-	alert(result);
-  });
-}
-
-// compare current and preview for differences
-function highlight_differences(){
-  // thanks @Tats_innit
-  // http://stackoverflow.com/questions/10765488/comparing-2-ul-list-item-in-jquery#answer-10765533
-  var master = [];
-  var preview = [];
-
-  // Identify the master values.
-  $('#current_navigation_menu').find("li").each(function(index,value) {
-      master.push($(this).text().replace(/(\r\n|\n|\r)/gm, ""));
-      /*
-	thanks @Cerbrus
-	for clean compounding return characters
-	http://stackoverflow.com/questions/21572938/what-is-the-%E2%86%B5-character-in-chrome-console#answer-21572964
-      */
-  });
-
-  $("#preview_navigation_menu").find("li").each(function(index) {
-      if(master[index] != $(this).text().replace(/(\r\n|\n|\r)/gm, "")) {
-	  $(this).addClass("different_li");
-      } else $(this).removeClass("different_li");
-  });
-  
-  $('#preview_navigation_menu').find("li").each(function(index,value) {
-      preview.push($(this).text());
-  });
-  
-  
-  // improved version to preserve ordering:
-  // clone current nav menu
-  $("#current_navigation_menu").clone().prop("id", "clone_navigation_menu" ).appendTo("#nav_menu_clone_col");
-  // for each li in clone, check if new menu contains item, else mark as removed
-  $("#clone_navigation_menu").find("li").each(function(index) {
-    var clone_li = $(this);
-    var match = false;
-    $("#preview_navigation_menu").find("li").each(function(index) {
-      if( $(this).text() === clone_li.text() ) match = true;
-    });
-    if (!match) {clone_li.addClass("different_li"); console.log(clone_li.text())}
-  });
-  // for each li in new menu, check if clone contains item, else append to clone and mark as new
-  
-}
-
-function create_collapsible_menu(menu){
-  // for each sub ul, add collapse toggle, or remove if empty
-  menu.find("ul").each(function(){
-    var list_items = $(this).find("li");
-    if(list_items.length == 0)
-      $(this).remove();
-    else
-      $(this).parent().prepend("<a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>");
-  });
-  $( ".sortable" ).sortable();
-  $( ".sortable" ).disableSelection();
-}
-
-
-$(function(){
-  // update exclude list file on checkbox change
+function update_exclude_list_on_checkbox_change(){
   $("input[name='exclude_file']").change(function(){
     var exclude_item = $(this);
     $.ajax({url: "sitemap.exclude.lst.update.ajax.php?exclude_file=" + exclude_item.val(), 
@@ -343,6 +276,98 @@ $(function(){
       cache: false
     });
   });
+}
+
+function create_collapsible_menu(menu){
+  // for each sub ul, add collapse toggle, or remove if empty
+  menu.find("ul").each(function(){
+    var list_items = $(this).find("li");
+    if(list_items.length == 0)
+      $(this).remove();
+    else
+      $(this).parent().prepend("<a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>");
+  });
+  $( ".sortable" ).sortable();
+  $( ".sortable" ).disableSelection();
+}
+
+// compare current and preview for differences
+  // thanks @Tats_innit
+  // http://stackoverflow.com/questions/10765488/comparing-2-ul-list-item-in-jquery#answer-10765533
+  
+  // thanks @Cerbrus
+  // for clean compounding return characters
+  // http://stackoverflow.com/questions/21572938/what-is-the-%E2%86%B5-character-in-chrome-console#answer-21572964
+function highlight_differences(){
+
+  // arrays of li values
+  var master = [];
+  var preview = [];
+  
+  // clone current nav menu
+  $("#current_navigation_menu").clone().prop("id", "clone_navigation_menu" ).appendTo("#nav_menu_clone_col");
+  
+  // get the current clone li values
+  $("#clone_navigation_menu").find("li").each(function(index,value) {
+      master.push( $(this).text().replace(/(\r\n|\n|\r)/gm, "") );
+  });
+
+  // get the new li values
+  $("#preview_navigation_menu").find("li").each(function(index,value) {
+      preview.push( $(this).text().replace(/(\r\n|\n|\r)/gm, "") );
+  });
+  
+  // debug values to console
+  console.log("master size: " + master.length);
+  console.log("preview size: " + preview.length);
+  for (i=0; i<master.length; i++) {
+    console.log("master[" + i + "]: " + master[i]);
+    console.log("preview[" + i + "]: " + preview[i]);
+  }
+  
+  // for each li in current clone, check if removed from preview
+  $("#clone_navigation_menu").find("li").each(function(index) {
+    if( $.inArray( $(this).text().replace(/(\r\n|\n|\r)/gm, ""), preview ) === -1 ) $(this).addClass("different_li");
+  });
+  
+  // for each li in new menu, check if clone contains item, else append to clone and mark as new
+  
+  
+  /*
+    var clone_li = $(this);
+    var match = false;
+    $("#preview_navigation_menu").find("li").each(function(index) {
+      if( $(this).html() === clone_li.html() ) match = true;
+      console.log($(this).text());
+    });
+    if (!match) {clone_li.addClass("different_li"); console.log(clone_li.text())}
+  
+  */
+  
+  /*
+  $("#preview_navigation_menu").find("li").each(function(index) {
+      if(master[index] != $(this).text().replace(/(\r\n|\n|\r)/gm, "")) {
+	  $(this).addClass("different_li");
+      } else $(this).removeClass("different_li");
+  });
+  
+  $('#preview_navigation_menu').find("li").each(function(index,value) {
+      preview.push($(this).text());
+  });
+  */
+}
+
+function ajax_write_nav_menu(){
+  $("#preview_navigation_menu").find("ul, li").removeAttr('class');
+  var navigation_menu_html = $("#preview_navigation_menu").html();
+  $.post("write.navigation-menu.ajax.php", { navigation_menu_html:navigation_menu_html}, function(result){
+	alert(result);
+  });
+}
+
+// on ready
+$(function(){
+  update_exclude_list_on_checkbox_change();
   //create_collapsible_menu($("#clone_navigation_menu"));
   create_collapsible_menu($("#preview_navigation_menu"));
   highlight_differences();
