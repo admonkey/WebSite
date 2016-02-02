@@ -96,7 +96,7 @@ function get_site_pages($main, $count=0){
             $count++;
             //$list_of_anchors .= "<span><li><a target='_blank' href='$path_web_root$basefile'>$file</a></li><ul>";
             $list_of_anchors .= "<span><li>$print_anchor checked $close_checkbox</li></span>\n<ul>";
-            $navigation_menu .= "<li><a href='$path_web_root$basefile'>$extracted_page_title</a>\n<ul style='display:none' class='sortable'>\n";
+            $navigation_menu .= "<li><a class='li_section_title' href='$path_web_root$basefile'>$extracted_page_title</a>\n<ul style='display:none' class='sortable'>\n";
             // <a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>
             //
             $count = get_site_pages($main.$file."/",$count);
@@ -248,7 +248,10 @@ require_once('_resources/footer.inc.php');
   text-decoration: line-through;
   color: red;
 }
-.different_li a {
+.removed_li a {
+  background-color: maroon;
+}
+.added_li a {
   background-color: yellow;
 }
 </style>
@@ -291,6 +294,11 @@ function create_collapsible_menu(menu){
   $( ".sortable" ).disableSelection();
 }
 
+function expand_all_nav_menu_li(nav_menu){
+  nav_menu.find(".glyphicon").toggleClass("glyphicon-plus-sign glyphicon-minus-sign");
+  nav_menu.find("ul").show();
+}
+
 // compare current and preview for differences
   // thanks @Tats_innit
   // http://stackoverflow.com/questions/10765488/comparing-2-ul-list-item-in-jquery#answer-10765533
@@ -309,29 +317,54 @@ function highlight_differences(){
   
   // get the current clone li values
   $("#clone_navigation_menu").find("li").each(function(index,value) {
-      master.push( $(this).text().replace(/(\r\n|\n|\r)/gm, "") );
+      master.push(  $( $(this).contents()[0] ).text()  );
   });
 
   // get the new li values
   $("#preview_navigation_menu").find("li").each(function(index,value) {
-      preview.push( $(this).text().replace(/(\r\n|\n|\r)/gm, "") );
+      preview.push(  $( $(this).contents()[0] ).text()  );
   });
   
   // debug values to console
   console.log("master size: " + master.length);
   console.log("preview size: " + preview.length);
+  /*
   for (i=0; i<master.length; i++) {
     console.log("master[" + i + "]: " + master[i]);
     console.log("preview[" + i + "]: " + preview[i]);
   }
+  */
+  
+  expand_all_nav_menu_li($("#clone_navigation_menu"));
   
   // for each li in current clone, check if removed from preview
   $("#clone_navigation_menu").find("li").each(function(index) {
-    if( $.inArray( $(this).text().replace(/(\r\n|\n|\r)/gm, ""), preview ) === -1 ) $(this).addClass("different_li");
+    if( $.inArray(  $($(this).contents()[0]).text(), preview  ) === -1 ) $(this).addClass("removed_li");
   });
   
   // for each li in new menu, check if clone contains item, else append to clone and mark as new
-  
+  $("#preview_navigation_menu").find("li").each(function(index) {
+    if( $.inArray(  $($(this).contents()[0]).text(), master  ) === -1 ) {
+      
+      // find parent in clone
+      var copy_cat = $(this).clone().addClass("added_li");
+      var preview_parent_section_title = $(this).parent("ul").prev(".li_section_title").text();
+      var found_clone_parent_match = false;
+      $("#clone_navigation_menu").find("li").each(function(index) {
+	// if exists, append to clone parent
+	if( $($(this).contents()[0]).text() === preview_parent_section_title ) {
+	  found_clone_parent_match = true;
+	  // if ul list exists, then append, else create new ul
+	  if ( $(this).child("ul").length )
+	    $(this).next("ul").append(copy_cat);
+	  else $(this).add( "ul" ).append(copy_cat);
+	  
+	}
+      });
+      // else, append to end of clone
+      if(!found_clone_parent_match) $("#clone_navigation_menu").append(copy_cat);
+    }
+  });
   
   /*
     var clone_li = $(this);
