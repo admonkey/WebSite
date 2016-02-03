@@ -201,7 +201,7 @@ echo "
   <div id='nav_menu_preview_col' class='col-sm-6 col-xs-12'>
     <h2>Preview</h2>
 
-    <ul id='preview_navigation_menu' class='sortable sidebar-nav navigation-menu' style='background-color: black; position:relative;'>
+    <ul id='generated_navigation_menu' style='display:none;'>
       <?php echo "$navigation_menu"; ?>
     </ul>
 
@@ -274,15 +274,14 @@ function update_exclude_list_on_checkbox_change(){
 
 function create_collapsible_menu(menu){
   // for each sub ul, add collapse toggle, or remove if empty
+  menu.find(".toggle_a").remove();
   menu.find("ul").each(function(){
     var list_items = $(this).find("li");
     if(list_items.length == 0)
       $(this).remove();
     else
-      $(this).parent().prepend("<a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>");
+      $(this).parent().prepend("<a class='toggle_a' href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>");
   });
-  $( ".sortable" ).sortable();
-  $( ".sortable" ).disableSelection();
 }
 
 function expand_all_nav_menu_li(nav_menu){
@@ -312,7 +311,7 @@ function highlight_differences(){
   });
 
   // get the new li values
-  $("#preview_navigation_menu").find("li").each(function(index,value) {
+  $("#generated_navigation_menu").find("li").each(function(index,value) {
       preview.push($(this).children("a.page_link").text());
   });
   
@@ -336,7 +335,7 @@ function highlight_differences(){
   });
 
   // for each li in new menu, check if clone contains item, else append to clone and mark as new
-  $("#preview_navigation_menu").find("li").each(function(index) {
+  $("#generated_navigation_menu").find("li").each(function(index) {
     if( $.inArray(  $(this).children("a.page_link").text(), master  ) === -1 ) {
       
       // find parent in clone
@@ -383,6 +382,18 @@ function highlight_differences(){
   */
 }
 
+function create_preview(){
+  var preview_ul = $("#clone_navigation_menu").clone().prop("id", "preview_navigation_menu" ).addClass("sortable");
+  create_collapsible_menu(preview_ul);
+  preview_ul.find(".removed_li").remove();
+  preview_ul.find(".added_li").removeClass("added_li");
+  preview_ul.find("ul").hide();
+  //preview_ul.find(".glyphicon").toggleClass("glyphicon-plus-sign glyphicon-minus-sign");
+  $("#nav_menu_preview_col").append(preview_ul);
+  $( ".sortable" ).sortable();
+  $( ".sortable" ).disableSelection();
+}
+
 function ajax_write_nav_menu(){
   $("#preview_navigation_menu").find("ul, li").removeAttr('class');
   var navigation_menu_html = $("#preview_navigation_menu").html();
@@ -395,8 +406,8 @@ function ajax_write_nav_menu(){
 $(function(){
   update_exclude_list_on_checkbox_change();
   //create_collapsible_menu($("#clone_navigation_menu"));
-  create_collapsible_menu($("#preview_navigation_menu"));
   highlight_differences();
+  create_preview();
 });
 
 </script>

@@ -4,3 +4,6 @@
 /Tables/table.static.html
 /SiteMap/iter.php
 /Login/Database/peredur
+/Login/LDAP/login.php
+/Login/LDAP/apache-secured
+/Login/LDAP/apache.php
