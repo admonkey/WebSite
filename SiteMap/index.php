@@ -96,7 +96,7 @@ function get_site_pages($main, $count=0){
             $count++;
             //$list_of_anchors .= "<span><li><a target='_blank' href='$path_web_root$basefile'>$file</a></li><ul>";
             $list_of_anchors .= "<span><li>$print_anchor checked $close_checkbox</li></span>\n<ul>";
-            $navigation_menu .= "<li><a class='li_section_title' href='$path_web_root$basefile'>$extracted_page_title</a>\n<ul style='display:none' class='sortable'>\n";
+            $navigation_menu .= "<li><a class='li_section_title page_link' href='$path_web_root$basefile'>$extracted_page_title</a>\n<ul style='display:none' class='sortable'>\n";
             // <a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>
             //
             $count = get_site_pages($main.$file."/",$count);
@@ -141,7 +141,7 @@ function get_site_pages($main, $count=0){
 	      $sitemap .= "\t\t<loc>//$_SERVER[SERVER_NAME]$webfile</loc>\n";
 	      
 	      // html navigation menu
-	      $navigation_menu .= "<li><a href='$webfile'>$extracted_page_title</a></li>\n";
+	      $navigation_menu .= "<li><a class='page_link' href='$webfile'>$extracted_page_title</a></li>\n";
 	      
 	      // last modified
 	      $modified = date("Y-m-d",filemtime($main.$file));
@@ -192,22 +192,13 @@ echo "
 <div class='well'>
   <div class='row'>
 
-
-  <div id='nav_menu_current_col' class='col-sm-4'>
-    <h2>Current</h2>
-    
-    <ul id='current_navigation_menu' class='sidebar-nav navigation-menu' style='background-color: black; position:relative;'>
-      <?php require("dev.navigation-menu.inc.php"); ?>
-    </ul>
-  </div><!-- /#nav_menu_current_col -->
-
-  <div id='nav_menu_clone_col' class='col-sm-4'>
-    <h2>Clone</h2>
+  <div id='nav_menu_clone_col' class='col-sm-6 col-xs-12'>
+    <h2>Diffs</h2>
     <!-- ul goes here -->
   </div><!-- /#nav_menu_clone_col -->
 
 
-  <div id='nav_menu_preview_col' class='col-sm-4'>
+  <div id='nav_menu_preview_col' class='col-sm-6 col-xs-12'>
     <h2>Preview</h2>
 
     <ul id='preview_navigation_menu' class='sortable sidebar-nav navigation-menu' style='background-color: black; position:relative;'>
@@ -313,21 +304,23 @@ function highlight_differences(){
   var preview = [];
   
   // clone current nav menu
-  $("#current_navigation_menu").clone().prop("id", "clone_navigation_menu" ).appendTo("#nav_menu_clone_col");
+  $("#current_navigation_menu").clone().css( "background-color", "black").css("position","relative").prop("id", "clone_navigation_menu" ).appendTo("#nav_menu_clone_col");
   
   // get the current clone li values
   $("#clone_navigation_menu").find("li").each(function(index,value) {
-      master.push(  $( $(this).contents()[0] ).text()  );
+      master.push($(this).children("a.page_link").text());
   });
 
   // get the new li values
   $("#preview_navigation_menu").find("li").each(function(index,value) {
-      preview.push(  $( $(this).contents()[0] ).text()  );
+      preview.push($(this).children("a.page_link").text());
   });
   
   // debug values to console
   console.log("master size: " + master.length);
+  console.log(master);
   console.log("preview size: " + preview.length);
+  console.log(preview);
   /*
   for (i=0; i<master.length; i++) {
     console.log("master[" + i + "]: " + master[i]);
@@ -336,15 +329,15 @@ function highlight_differences(){
   */
   
   expand_all_nav_menu_li($("#clone_navigation_menu"));
-  
+
   // for each li in current clone, check if removed from preview
   $("#clone_navigation_menu").find("li").each(function(index) {
-    if( $.inArray(  $($(this).contents()[0]).text(), preview  ) === -1 ) $(this).addClass("removed_li");
+    if( $.inArray(  $(this).children("a.page_link").text(), preview  ) === -1 ) $(this).addClass("removed_li");
   });
-  
+
   // for each li in new menu, check if clone contains item, else append to clone and mark as new
   $("#preview_navigation_menu").find("li").each(function(index) {
-    if( $.inArray(  $($(this).contents()[0]).text(), master  ) === -1 ) {
+    if( $.inArray(  $(this).children("a.page_link").text(), master  ) === -1 ) {
       
       // find parent in clone
       var copy_cat = $(this).clone().addClass("added_li");
@@ -352,13 +345,13 @@ function highlight_differences(){
       var found_clone_parent_match = false;
       $("#clone_navigation_menu").find("li").each(function(index) {
 	// if exists, append to clone parent
-	if( $($(this).contents()[0]).text() === preview_parent_section_title ) {
+	if( $(this).children("a.page_link").text() === preview_parent_section_title ) {
 	  found_clone_parent_match = true;
 	  // if ul list exists, then append, else create new ul
-	  if ( $(this).child("ul").length )
-	    $(this).next("ul").append(copy_cat);
-	  else $(this).add( "ul" ).append(copy_cat);
-	  
+	  //if ( $(this).parent().has("ul") )
+	  if($(this).children("ul").length)
+	    $(this).children("ul").append(copy_cat);
+	  else $(this).append("<ul></ul>").find("ul").append(copy_cat);
 	}
       });
       // else, append to end of clone

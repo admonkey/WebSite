@@ -133,7 +133,7 @@ if ( ! ((strpos(basename($_SERVER["SCRIPT_NAME"]),'.ajax.') !== false) || (strpo
 
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
-            <ul class="sidebar-nav navigation-menu">
+            <ul id='current_navigation_menu' class="sidebar-nav navigation-menu">
                 <!-- removed redundant sidebar brand
 		  <li class="sidebar-brand">
 		      <a href="<?php echo $path_web_root;?>/"><?php echo $site_title; ?></a>
