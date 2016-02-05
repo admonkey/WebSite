@@ -160,6 +160,15 @@ function get_site_pages($main, $count=0){
 // begin page html
 echo "<h1>$section_title</h1>";
 
+
+
+// main function call
+$number_of_files = get_site_pages($dir);
+// close sitemap.xml tag *must come after call to get_site_pages() in main*
+$sitemap .= "</urlset>\n";
+
+?><div class='row'><div class='col-md-6 col-md-push-6'><?php
+
 // filter information
 echo "
 <div id='sitemap_filters_div' class='well'>
@@ -172,10 +181,7 @@ foreach ($included_extensions as $in_ext){
 }
 echo "</ul></div><!-- /#sitemap_filters_div.well -->";
 
-// main function call
-$number_of_files = get_site_pages($dir);
-// close sitemap.xml tag *must come after call to get_site_pages() in main*
-$sitemap .= "</urlset>\n";
+?></div><!-- /.col-md-6 col-sm-12 --><div class='col-md-6 col-md-pull-6'><?php
 
 // list of links to pages found
 echo "
@@ -185,6 +191,8 @@ echo "
   <div id='change_notifications'></div>
   <a id='regenerate_sitemap_xml' class='btn btn-primary' style='display:none' href=''>Regenerate sitemap.xml</a>
 </div><!-- /#links_to_pages.well -->";
+
+?></div><!-- /.col-md-6 col-sm-12 --></div><!-- /.row --><?php
 
 // preview html navigation menu
 ?>
@@ -204,10 +212,12 @@ echo "
     <ul id='generated_navigation_menu' style='display:none;'>
       <?php echo "$navigation_menu"; ?>
     </ul>
+    
+    <div id='preview_nav_menu_container'></div>
 
     <a href='javascript:ajax_write_nav_menu()' class='btn btn-primary' style='margin:10px'>Write to File</a>
     
-    <a href='javascript:highlight_differences()' class='btn btn-success' style='margin:10px'>Refresh</a>
+    <a href='javascript:create_diff_menu()' class='btn btn-success' style='margin:10px'>Refresh</a>
 
   </div><!-- /#nav_menu_preview_col -->
 
@@ -217,17 +227,12 @@ echo "
 
 <?php
 
-
-// print raw html navigation menu to screen
-echo "<div class='well'><h2>navigation menu</h2>";
-echo "<pre id='raw_navigation_menu'>" . htmlentities($navigation_menu) . "</pre>";
-echo "</div><!-- /.well -->";
-
-// print raw sitemap.xml to screen
+/*
+// TODO: print raw sitemap.xml to screen
 echo "<div class='well'><h2>sitemap.xml</h2>";
 echo "<pre id='raw_sitemap_xml'>" . htmlentities($sitemap) . "</pre>";
 echo "</div><!-- /.well -->";
-
+*/
 
 require_once('_resources/footer.inc.php');
 
@@ -273,9 +278,10 @@ function update_exclude_list_on_checkbox_change(){
 }
 
 function create_collapsible_menu(menu){
-  // for each sub ul, add collapse toggle, or remove if empty
+  // for each sub ul, add/renew collapse toggle, or remove if empty
   menu.find(".toggle_a").remove();
   menu.find("ul").each(function(){
+    $(this).hide();
     var list_items = $(this).find("li");
     if(list_items.length == 0)
       $(this).remove();
@@ -285,113 +291,76 @@ function create_collapsible_menu(menu){
 }
 
 function expand_all_nav_menu_li(nav_menu){
-  nav_menu.find(".glyphicon").toggleClass("glyphicon-plus-sign glyphicon-minus-sign");
+  nav_menu.find(".glyphicon").removeClass("glyphicon-plus-sign").addClass("glyphicon-minus-sign");
   nav_menu.find("ul").show();
+}
+
+function collapse_all_nav_menu_li(nav_menu){
+  nav_menu.find(".glyphicon").removeClass("glyphicon-minus-sign").addClass("glyphicon-plus-sign");
+  nav_menu.find("ul").hide();
 }
 
 // compare current and preview for differences
   // thanks @Tats_innit
   // http://stackoverflow.com/questions/10765488/comparing-2-ul-list-item-in-jquery#answer-10765533
-  
-  // thanks @Cerbrus
-  // for clean compounding return characters
-  // http://stackoverflow.com/questions/21572938/what-is-the-%E2%86%B5-character-in-chrome-console#answer-21572964
-function highlight_differences(){
+function create_diff_menu(){
 
   // arrays of li values
-  var master = [];
-  var preview = [];
+  var current_array = [];
+  var generated_array = [];
   
-  // clone current nav menu
-  $("#current_navigation_menu").clone().css( "background-color", "black").css("position","relative").prop("id", "clone_navigation_menu" ).appendTo("#nav_menu_clone_col");
+  // prep for diff canvas, clone current nav menu
+  var diff_nav_menu = $("#current_navigation_menu").clone().css( "background-color", "black").css("position","relative").prop("id", "diff_nav_menu" ).appendTo("#nav_menu_clone_col");
   
   // get the current clone li values
-  $("#clone_navigation_menu").find("li").each(function(index,value) {
-      master.push($(this).children("a.page_link").text());
+  diff_nav_menu.find("li").each(function(index,value) {
+      current_array.push($(this).children("a.page_link").text());
   });
 
   // get the new li values
   $("#generated_navigation_menu").find("li").each(function(index,value) {
-      preview.push($(this).children("a.page_link").text());
+      generated_array.push($(this).children("a.page_link").text());
   });
   
-  // debug values to console
-  console.log("master size: " + master.length);
-  console.log(master);
-  console.log("preview size: " + preview.length);
-  console.log(preview);
-  /*
-  for (i=0; i<master.length; i++) {
-    console.log("master[" + i + "]: " + master[i]);
-    console.log("preview[" + i + "]: " + preview[i]);
-  }
-  */
-  
-  expand_all_nav_menu_li($("#clone_navigation_menu"));
-
-  // for each li in current clone, check if removed from preview
-  $("#clone_navigation_menu").find("li").each(function(index) {
-    if( $.inArray(  $(this).children("a.page_link").text(), preview  ) === -1 ) $(this).addClass("removed_li");
+  // for each li in current clone, check if removed from generated
+  diff_nav_menu.find("li").each(function(index) {
+    if( $.inArray(  $(this).children("a.page_link").text(), generated_array  ) === -1 ) $(this).addClass("removed_li");
   });
 
-  // for each li in new menu, check if clone contains item, else append to clone and mark as new
+  // for each li in new menu, check if current clone contains item, else append to clone and mark as new
   $("#generated_navigation_menu").find("li").each(function(index) {
-    if( $.inArray(  $(this).children("a.page_link").text(), master  ) === -1 ) {
+    if( $.inArray(  $(this).children("a.page_link").text(), current_array  ) === -1 ) {
       
       // find parent in clone
       var copy_cat = $(this).clone().addClass("added_li");
       var preview_parent_section_title = $(this).parent("ul").prev(".li_section_title").text();
       var found_clone_parent_match = false;
-      $("#clone_navigation_menu").find("li").each(function(index) {
+      diff_nav_menu.find("li").each(function(index) {
 	// if exists, append to clone parent
 	if( $(this).children("a.page_link").text() === preview_parent_section_title ) {
 	  found_clone_parent_match = true;
 	  // if ul list exists, then append, else create new ul
-	  //if ( $(this).parent().has("ul") )
 	  if($(this).children("ul").length)
 	    $(this).children("ul").append(copy_cat);
 	  else $(this).append("<ul></ul>").find("ul").append(copy_cat);
 	}
       });
       // else, append to end of clone
-      if(!found_clone_parent_match) $("#clone_navigation_menu").append(copy_cat);
+      if(!found_clone_parent_match) diff_nav_menu.append(copy_cat);
     }
   });
-  
-  /*
-    var clone_li = $(this);
-    var match = false;
-    $("#preview_navigation_menu").find("li").each(function(index) {
-      if( $(this).html() === clone_li.html() ) match = true;
-      console.log($(this).text());
-    });
-    if (!match) {clone_li.addClass("different_li"); console.log(clone_li.text())}
-  
-  */
-  
-  /*
-  $("#preview_navigation_menu").find("li").each(function(index) {
-      if(master[index] != $(this).text().replace(/(\r\n|\n|\r)/gm, "")) {
-	  $(this).addClass("different_li");
-      } else $(this).removeClass("different_li");
-  });
-  
-  $('#preview_navigation_menu').find("li").each(function(index,value) {
-      preview.push($(this).text());
-  });
-  */
+  create_collapsible_menu(diff_nav_menu);
+  expand_all_nav_menu_li(diff_nav_menu);
 }
 
-function create_preview(){
-  var preview_ul = $("#clone_navigation_menu").clone().prop("id", "preview_navigation_menu" ).addClass("sortable");
-  create_collapsible_menu(preview_ul);
+function create_preview_menu(){
+  var preview_ul = $("#diff_nav_menu").clone().prop("id", "preview_navigation_menu" ).addClass("sortable");
   preview_ul.find(".removed_li").remove();
   preview_ul.find(".added_li").removeClass("added_li");
-  preview_ul.find("ul").hide();
-  //preview_ul.find(".glyphicon").toggleClass("glyphicon-plus-sign glyphicon-minus-sign");
-  $("#nav_menu_preview_col").append(preview_ul);
-  $( ".sortable" ).sortable();
-  $( ".sortable" ).disableSelection();
+  preview_ul.find("ul").addClass("sortable");
+  $("#preview_nav_menu_container").append(preview_ul);
+  create_collapsible_menu(preview_ul);
+  collapse_all_nav_menu_li(preview_ul);
 }
 
 function ajax_write_nav_menu(){
@@ -405,9 +374,10 @@ function ajax_write_nav_menu(){
 // on ready
 $(function(){
   update_exclude_list_on_checkbox_change();
-  //create_collapsible_menu($("#clone_navigation_menu"));
-  highlight_differences();
-  create_preview();
+  create_diff_menu();
+  create_preview_menu();
+  $( ".sortable" ).sortable();
+  $( ".sortable" ).disableSelection();
 });
 
 </script>
