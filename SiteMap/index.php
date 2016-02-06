@@ -1,6 +1,5 @@
 <?php
 
-require_once('_resources/credentials.inc.php');
 //$page_title = "Home Page";
 require_once('_resources/header.inc.php');
 
@@ -94,11 +93,8 @@ function get_site_pages($main, $count=0){
 	      
 	    }
             $count++;
-            //$list_of_anchors .= "<span><li><a target='_blank' href='$path_web_root$basefile'>$file</a></li><ul>";
             $list_of_anchors .= "<span><li>$print_anchor checked $close_checkbox</li></span>\n<ul>";
-            $navigation_menu .= "<li><a class='li_section_title page_link' href='$path_web_root$basefile'>$extracted_page_title</a>\n<ul style='display:none' class='sortable'>\n";
-            // <a href='javascript:void(0)' onclick='toggle_nav_item($(this))'><span class='navigation_menu_toggle glyphicon glyphicon-plus-sign'></span></a>
-            //
+            $navigation_menu .= "<li><a class='li_section_title page_link' href='$path_web_root$basefile/'>$extracted_page_title</a>\n<ul style='display:none' class='sortable'>\n";
             $count = get_site_pages($main.$file."/",$count);
             $navigation_menu .= "</ul>\n</li>\n";
         }
@@ -160,7 +156,7 @@ function get_site_pages($main, $count=0){
 // begin page html
 echo "<h1>$section_title</h1>";
 
-
+?><p class='lead text-danger bg-danger'>This section is still under development, but some functionality is available.</p><?php
 
 // main function call
 $number_of_files = get_site_pages($dir);
