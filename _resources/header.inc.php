@@ -139,7 +139,7 @@ if ( ! ((strpos(basename($_SERVER["SCRIPT_NAME"]),'.ajax.') !== false) || (strpo
 		      <a href="<?php echo $path_web_root;?>/"><?php echo $site_title; ?></a>
 		  </li>
                 -->
-                <?php include("$path_real_root/SiteMap/dev.navigation-menu.inc.php"); ?>
+                <?php include("$path_real_root/SiteMap/navigation-menu.inc.php"); ?>
             </ul>
 
             <script>
@@ -148,12 +148,12 @@ if ( ! ((strpos(basename($_SERVER["SCRIPT_NAME"]),'.ajax.') !== false) || (strpo
 		toggle.find(".glyphicon").toggleClass("glyphicon-plus-sign glyphicon-minus-sign");
 		toggle.parent().children("ul").toggle("blind");
 	      }
-
+/*
 	      $('.navigation-menu').find('a').each(function(){
 		    if ( $(this).attr("href") == "<?php echo $_SERVER['SCRIPT_NAME'];?>" || $(this).attr("href") == "<?php echo dirname($_SERVER['SCRIPT_NAME'])."/";?>" )
 		      $(this).parent().addClass("active");
 	      });
-
+*/
 	    </script>
 
 
