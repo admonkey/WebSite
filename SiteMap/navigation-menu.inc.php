@@ -87,29 +87,6 @@
 
 </ul></li>                        </ul>
 
-            <script>
-
-	      function toggle_nav_item(toggle){
-		toggle.find(".glyphicon").toggleClass("glyphicon-plus-sign glyphicon-minus-sign");
-		toggle.parent().children("ul").toggle("blind");
-	      }
-
-	      $('.navigation-menu').find('a').each(function(){
-		    if ( $(this).attr("href") == "/WebSite-template/SiteMap/index.php" || $(this).attr("href") == "/WebSite-template/SiteMap/" )
-		      $(this).parent().addClass("active");
-	      });
-
-	    </script>
-
-
-	    <style>
-	      .navigation_menu_toggle {
-		margin-top : 20px;
-		margin-right : 10px;
-		float : right;
-	      }
-	    </style>
-
         </li><li><a class="li_section_title page_link" href="/WebSite-template/Profiles">Profiles</a>
 
 </li><li><a class="toggle_a" href="javascript:void(0)" onclick="toggle_nav_item($(this))"><span class="navigation_menu_toggle glyphicon glyphicon-plus-sign"></span></a><a class="li_section_title page_link" href="/WebSite-template/Forum">Forum</a>
