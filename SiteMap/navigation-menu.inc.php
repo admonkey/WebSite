@@ -1,76 +1,3 @@
-
-                <!-- removed redundant sidebar brand
-		  <li class="sidebar-brand">
-		      <a href="/WebSite-template/">Web Site</a>
-		  </li>
-                -->
-                
-                <!-- removed redundant sidebar brand
-		  <li class="sidebar-brand">
-		      <a href="/WebSite-template/">Web Site</a>
-		  </li>
-                -->
-                
-                <!-- removed redundant sidebar brand
-		  <li class="sidebar-brand">
-		      <a href="/WebSite-template/">Web Site</a>
-		  </li>
-                -->
-                
-                <!-- removed redundant sidebar brand
-		  <li class="sidebar-brand">
-		      <a href="/WebSite-template/">Web Site</a>
-		  </li>
-                -->
-                
-                <!-- removed redundant sidebar brand
-		  <li class="sidebar-brand">
-		      <a href="/WebSite-template/">Web Site</a>
-		  </li>
-                -->
-                
-                <!-- removed redundant sidebar brand
-		  <li class="sidebar-brand">
-		      <a href="/WebSite-template/">Web Site</a>
-		  </li>
-                -->
-                
-                <!-- removed redundant sidebar brand
-		  <li class="sidebar-brand">
-		      <a href="/WebSite-template/">Web Site</a>
-		  </li>
-                -->
-                
-                <!-- removed redundant sidebar brand
-		  <li class="sidebar-brand">
-		      <a href="/WebSite-template/">Web Site</a>
-		  </li>
-                -->
-                
-                <!-- removed redundant sidebar brand
-		  <li class="sidebar-brand">
-		      <a href="/WebSite-template/">Web Site</a>
-		  </li>
-                -->
-                
-                <!-- removed redundant sidebar brand
-		  <li class="sidebar-brand">
-		      <a href="/WebSite-template/">Web Site</a>
-		  </li>
-                -->
-                
-                <!-- removed redundant sidebar brand
-		  <li class="sidebar-brand">
-		      <a href="/WebSite-template/">Web Site</a>
-		  </li>
-                -->
-                
-                <!-- removed redundant sidebar brand
-		  <li class="sidebar-brand">
-		      <a href="/WebSite-template/">Web Site</a>
-		  </li>
-                -->
-                
       <li><a class="li_section_title page_link" href="/WebSite-template/SiteMap">SiteMap</a>
 
 </li><li><a class="toggle_a" href="javascript:void(0)" onclick="toggle_nav_item($(this))"><span class="navigation_menu_toggle glyphicon glyphicon-plus-sign"></span></a><a class="li_section_title page_link" href="/WebSite-template/Login">Login</a>
@@ -105,8 +32,4 @@
 </li><li><a class="li_section_title page_link" href="/WebSite-template/Embed">Embed</a>
 
 </li>
-
-
-
-
                                                                                                                             
