@@ -110,7 +110,7 @@ if ( !empty($include_mysqli) ) {
 
   $mysqli_connection = new mysqli($database_server, $database_username, $database_password, $database_name);
   if ($mysqli_connection->connect_error) {
-      die($mysqli_connection->error());
+      die($mysqli_connection->connect_error);
   } else $mysqli_connected = true;
 
 } elseif ( !empty($include_mysqlo) ) {
